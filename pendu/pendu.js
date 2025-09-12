@@ -27,10 +27,10 @@
 
   
   // --------------------------------------
-  showAlert = function(title, icon, message) {
+  showAlert = function(title, icon, align, message) {
     return Swal.fire({
       title: title,
-      html: `<div style='text-align: left;'>${message}</div>`,
+      html: `<div style='text-align: ${align};'>${message}</div>`,
       icon: icon,
       confirmButtonText: 'OK'
     });
@@ -82,7 +82,7 @@
         switch (letter) {
           case "Au sujet":
             return (async function() {
-              return (await showAlert("Au sujet", "", AIDE.replace("{sad}", "\uD83D\uDE1E")));
+              return (await showAlert("Au sujet", "", "left", AIDE.replace("{sad}", "\uD83D\uDE1E")));
             })();
           case "Nouveau mot":
             return new_word();
@@ -156,7 +156,7 @@
       }
       await sleep(250);
       return (async function() {
-        return (await showAlert("Hélas!", "info", `Vous avez  perdu.<br><br>Le mot caché était: ${state.hiddenWord}`));
+        return (await showAlert("Hélas!", "info", "center", `Vous avez  perdu.<br><br>Le mot caché était: ${state.hiddenWord}`));
       })();
     } else if (state.revealedWord === state.hiddenWord) {
       ref1 = state.keyboardKeys;
@@ -166,7 +166,7 @@
       }
       await sleep(250);
       return (async function() {
-        return (await showAlert("Bravo!", "info", "Vous avez gagné."));
+        return (await showAlert("Bravo!", "info", "center", "Vous avez gagné."));
       })();
     }
   };
@@ -175,7 +175,7 @@
   reveal_word = function() {
     if (state.revealedWord === state.hiddenWord) {
       return (async function() {
-        return (await showAlert("Info", "", "Le mot caché est déjà révélé."));
+        return (await showAlert("Info", "", "center", "Le mot caché est déjà révélé."));
       })();
     } else {
       return (async function() {
@@ -214,7 +214,7 @@
       key.disabled = false;
     }
     (async function() {
-      return (await showAlert(`Partie no: ${state.gamesCounter}`, "", `Mot caché de ${state.hiddenWord.length} lettres.`));
+      return (await showAlert(`Partie no: ${state.gamesCounter}`, "", "center", `Mot caché de ${state.hiddenWord.length} lettres.`));
     })();
     document.getElementById('theImage').src = "pendu/pendu_0.png";
     return update_labels();
