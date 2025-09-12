@@ -20,10 +20,10 @@ askConfirm = (title, icon, message) ->
     focusCancel: true
     
 # --------------------------------------
-showAlert = (title, icon, message) ->
+showAlert = (title, icon, align, message) ->
   Swal.fire
     title: title
-    html: "<div style='text-align: left;'>#{message}</div>"
+    html: "<div style='text-align: #{align};'>#{message}</div>"
     icon: icon
     confirmButtonText: 'OK'
 
@@ -71,7 +71,7 @@ create_keyboard = ->
         btn.onclick = ->
             switch letter
                 when "Au sujet"
-                    do -> await showAlert("Au sujet", "", AIDE.replace("{sad}", "\uD83D\uDE1E"))
+                    do -> await showAlert("Au sujet", "", "left",  AIDE.replace("{sad}", "\uD83D\uDE1E"))
                 when "Nouveau mot"
                     new_word()
                 when "Révéler mot"
@@ -125,17 +125,17 @@ guess = (letter) ->
         update_labels()
         key.disabled = true for key in state.keyboardKeys
         await sleep 250
-        do -> await showAlert("Hélas!", "info",
+        do -> await showAlert("Hélas!", "info", "center",
             "Vous avez  perdu.<br><br>Le mot caché était: #{state.hiddenWord}")
     else if state.revealedWord is state.hiddenWord
         key.disabled = true for key in state.keyboardKeys
         await sleep 250
-        do -> await showAlert("Bravo!", "info", "Vous avez gagné.")
+        do -> await showAlert("Bravo!", "info", "center", "Vous avez gagné.")
 
 # --------------------------------------
 reveal_word = ->
     if state.revealedWord is state.hiddenWord
-        do -> await showAlert("Info", "", "Le mot caché est déjà révélé.")
+        do -> await showAlert("Info", "", "center", "Le mot caché est déjà révélé.")
     else
         do ->
           result = await askConfirm("Attention", "question", 
@@ -164,7 +164,7 @@ generate_new_word = ->
     # enable all alphabetic virtual keys
     key.disabled = false for key in state.keyboardKeys
 
-    do -> await showAlert("Partie no: #{state.gamesCounter}", "", 
+    do -> await showAlert("Partie no: #{state.gamesCounter}", "", "center",
       "Mot caché de #{state.hiddenWord.length} lettres.")
 
     document.getElementById('theImage').src = "pendu/pendu_0.png"
