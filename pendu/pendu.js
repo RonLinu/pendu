@@ -46,12 +46,12 @@
   // --------------------------------------
   update_labels = function() {
     var labels, prefix, top;
-    top = document.getElementById('top');
-    prefix = '<li><kbd style="font-size: 16px;">';
+    top = document.getElementById('top-list');
+    prefix = '<li><kbd style="font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;';
     labels = `${prefix}Partie no: ${state.gamesCounter}</kbd></li>`;
     labels += `${prefix}Mot caché: ${state.revealedWord}</kbd></li>`;
     labels += `${prefix}&nbsp;&nbsp;&nbsp;Échecs: ${state.failsCounter}</kbd></li>`;
-    labels += "<li></li>";
+    labels += "<li>&nbsp;</li>";
     return top.innerHTML = labels;
   };
 
