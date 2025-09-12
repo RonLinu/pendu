@@ -17,12 +17,13 @@ askConfirm = (title, icon, message) ->
     showCancelButton: true
     confirmButtonText: 'Oui'
     cancelButtonText: 'Non'
-
+    focusCancel: true
+    
 # --------------------------------------
 showAlert = (title, icon, message) ->
   Swal.fire
     title: title
-    html: message
+    html: "<div style='text-align: left;'>#{message}</div>"
     icon: icon
     confirmButtonText: 'OK'
 
@@ -33,9 +34,10 @@ sleep = (ms) ->
 # --------------------------------------
 update_labels = ->
     top = document.getElementById 'top'
-    labels  = "<li><kbd style=\"font-size: 16px;\">Partie no: #{state.gamesCounter}</kbd></li>"
-    labels += "<li><kbd style=\"font-size: 16px;\">Mot caché: #{state.revealedWord}</kbd></li>"
-    labels += "<li><kbd style=\"font-size: 16px;\">&nbsp;&nbsp;&nbsp;Échecs: #{state.failsCounter}</kbd></li>"
+    prefix = '<li><kbd style="font-size: 16px;">'
+    labels  = "#{prefix}Partie no: #{state.gamesCounter}</kbd></li>"
+    labels += "#{prefix}Mot caché: #{state.revealedWord}</kbd></li>"
+    labels += "#{prefix}&nbsp;&nbsp;&nbsp;Échecs: #{state.failsCounter}</kbd></li>"
     labels += "<li></li>"
     top.innerHTML = labels
 
@@ -53,7 +55,7 @@ create_keyboard = ->
         ['q','w','e','r','t','y','u','i','o','p']
         ['a','s','d','f','g','h','j','k','l']
         ['z','x','c','v','b','n','m']
-        ['Aide', 'Nouveau mot', 'Révéler mot']
+        ['Au sujet', 'Nouveau mot', 'Révéler mot']
     ]
 
     # Function to create a key button
@@ -68,8 +70,8 @@ create_keyboard = ->
         if letter.length == 1 then state.keyboardKeys.push btn   # record each key reference
         btn.onclick = ->
             switch letter
-                when "Aide"
-                    do -> await showAlert("Aide", "", AIDE.replace("{sad}", "\uD83D\uDE1E"))
+                when "Au sujet"
+                    do -> await showAlert("Au sujet", "", AIDE.replace("{sad}", "\uD83D\uDE1E"))
                 when "Nouveau mot"
                     new_word()
                 when "Révéler mot"
