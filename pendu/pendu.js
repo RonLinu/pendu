@@ -20,15 +20,17 @@
       icon: icon,
       showCancelButton: true,
       confirmButtonText: 'Oui',
-      cancelButtonText: 'Non'
+      cancelButtonText: 'Non',
+      focusCancel: true
     });
   };
 
+  
   // --------------------------------------
   showAlert = function(title, icon, message) {
     return Swal.fire({
       title: title,
-      html: message,
+      html: `<div style='text-align: left;'>${message}</div>`,
       icon: icon,
       confirmButtonText: 'OK'
     });
@@ -43,11 +45,12 @@
 
   // --------------------------------------
   update_labels = function() {
-    var labels, top;
+    var labels, prefix, top;
     top = document.getElementById('top');
-    labels = `<li><kbd style=\"font-size: 16px;\">Partie no: ${state.gamesCounter}</kbd></li>`;
-    labels += `<li><kbd style=\"font-size: 16px;\">Mot caché: ${state.revealedWord}</kbd></li>`;
-    labels += `<li><kbd style=\"font-size: 16px;\">&nbsp;&nbsp;&nbsp;Échecs: ${state.failsCounter}</kbd></li>`;
+    prefix = '<li><kbd style="font-size: 16px;">';
+    labels = `${prefix}Partie no: ${state.gamesCounter}</kbd></li>`;
+    labels += `${prefix}Mot caché: ${state.revealedWord}</kbd></li>`;
+    labels += `${prefix}&nbsp;&nbsp;&nbsp;Échecs: ${state.failsCounter}</kbd></li>`;
     labels += "<li></li>";
     return top.innerHTML = labels;
   };
@@ -61,7 +64,7 @@
     keyboard.style.marginTop = '10px';
     footer.appendChild(keyboard);
     // Define rows of alphabet keys
-    rows = [['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'], ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'], ['z', 'x', 'c', 'v', 'b', 'n', 'm'], ['Aide', 'Nouveau mot', 'Révéler mot']];
+    rows = [['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'], ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'], ['z', 'x', 'c', 'v', 'b', 'n', 'm'], ['Au sujet', 'Nouveau mot', 'Révéler mot']];
     // Function to create a key button
     createKey = function(letter) {
       var btn;
@@ -77,9 +80,9 @@
       }
       btn.onclick = function() {
         switch (letter) {
-          case "Aide":
+          case "Au sujet":
             return (async function() {
-              return (await showAlert("Aide", "", AIDE.replace("{sad}", "\uD83D\uDE1E")));
+              return (await showAlert("Au sujet", "", AIDE.replace("{sad}", "\uD83D\uDE1E")));
             })();
           case "Nouveau mot":
             return new_word();
