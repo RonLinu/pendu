@@ -5,27 +5,32 @@ state =
     failsCounter : 0
 
     hiddenWord   : ""
-    triedLetters : []
     keyboardKeys : []
 
 # --------------------------------------
 askConfirm = (title, icon, message) ->
-  Swal.fire
-    title: title
-    html: message
-    icon: icon
-    showCancelButton: true
-    confirmButtonText: 'Oui'
-    cancelButtonText: 'Non'
-    focusCancel: true
+    Swal.fire
+        title: title
+        html: message
+        icon: icon
+        showCancelButton: true
+        confirmButtonText: 'Oui'
+        cancelButtonText: 'Non'
+        focusCancel: true
+        position: 'top'
+        customClass:
+            popup: 'custom-popup-position'
     
 # --------------------------------------
 showAlert = (title, icon, align, message) ->
-  Swal.fire
-    title: title
-    html: "<div style='text-align: #{align};'>#{message}</div>"
-    icon: icon
-    confirmButtonText: 'OK'
+    Swal.fire
+        title: title
+        html: "<div style='text-align: #{align};'>#{message}</div>"
+        icon: icon
+        confirmButtonText: 'OK'
+        position: 'top'
+        customClass:
+            popup: 'custom-popup-position'
 
 # --------------------------------------
 sleep = (ms) ->
@@ -33,13 +38,15 @@ sleep = (ms) ->
 
 # --------------------------------------
 update_labels = ->
-    top = document.getElementById 'top-list'
+    topList = document.getElementById 'top-list'
     prefix = '<li><kbd style="font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;'
+    
     labels  = "#{prefix}Partie no: #{state.gamesCounter}</kbd></li>"
     labels += "#{prefix}Mot caché: #{state.revealedWord}</kbd></li>"
     labels += "#{prefix}&nbsp;&nbsp;&nbsp;Échecs: #{state.failsCounter}</kbd></li>"
     labels += "<li>&nbsp;</li>"
-    top.innerHTML = labels
+    
+    topList.innerHTML = labels
 
 # --------------------------------------
 create_keyboard = ->
@@ -71,7 +78,7 @@ create_keyboard = ->
         btn.onclick = ->
             switch letter
                 when "Au sujet"
-                    do -> await showAlert("Au sujet", "", "left",  AIDE.replace("{sad}", "\uD83D\uDE1E"))
+                    do -> await showAlert("Au sujet de Pendu", "", "left", AIDE)
                 when "Nouveau mot"
                     new_word()
                 when "Révéler mot"
@@ -104,13 +111,6 @@ reveal = (letter) ->
 
 # --------------------------------------
 guess = (letter) ->
-    if state.revealedWord is state.hiddenWord
-        return
-
-    if letter in state.triedLetters then return
-
-    state.triedLetters.push letter
-
     beforeReveal = state.revealedWord
     reveal letter
 
@@ -138,14 +138,14 @@ reveal_word = ->
         do -> await showAlert("Info", "", "center", "Le mot caché est déjà révélé.")
     else
         do ->
-          result = await askConfirm("Attention", "question", 
+            result = await askConfirm("Attention", "question", 
             "Révéler le mot caché terminera cette partie.<br><br>Êtes-vous certain?")
 
-          if result.isConfirmed
-            # disable all alphabetic virtual keys
-            key.disabled = true for key in state.keyboardKeys
-            state.revealedWord = state.hiddenWord
-            update_labels()
+            if result.isConfirmed
+                # disable all alphabetic virtual keys
+                key.disabled = true for key in state.keyboardKeys
+                state.revealedWord = state.hiddenWord
+                update_labels()
 
 # --------------------------------------
 generate_new_word = ->
@@ -159,7 +159,6 @@ generate_new_word = ->
 
     state.gamesCounter++
     state.failsCounter = 0
-    state.triedLetters = []
 
     # enable all alphabetic virtual keys
     key.disabled = false for key in state.keyboardKeys
@@ -176,11 +175,11 @@ new_word = ->
         generate_new_word()
     else
         do ->
-          result = await askConfirm("Attention", "question", 
+            result = await askConfirm("Attention", "question", 
             "Êtes-vous certain de commencer avec un nouveau mot?")
 
-          if result.isConfirmed
-            generate_new_word()
+            if result.isConfirmed
+                generate_new_word()
 
 # --------------------- start game ----------------------
 
