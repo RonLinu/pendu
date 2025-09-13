@@ -2,4 +2,5 @@ This is a French version of Hangman (Pendu).
 
 The original version was in Tcl/Tk.
 
-I rewrote the game from the ground up in CoffeeScript.
+I rewrote the game from the ground up for the web so it could be truly multi-platform and
+accessible everywhere. I wrote in CoffeeScript because I find it less painful than JavaScript.
