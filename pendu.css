@@ -1,0 +1,28 @@
+
+#top {
+  width: 300px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+#top-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+#picture {
+  text-align: center;
+}
+
+#theImage {
+  border: 2px solid black;
+}
+
+#footer {
+  text-align: center;
+}
+
+.custom-popup-position {
+    margin-top: 100px;  /* fine tuning of SweetAlert2 dialogs */
+}

@@ -80,7 +80,7 @@
       btn.style.padding = '5px 14px';
       btn.style.fontSize = '16px';
       btn.style.cursor = 'pointer';
-      //~ btn.style.backgroundColor = btn.style.backgroundColor
+      //~ btn.style.backgroundColor = any color here
       if (letter.length === 1) {
         state.keyboardKeys.push(btn); // record each key reference
       }
@@ -240,7 +240,7 @@
 
   create_keyboard();
 
-  await sleep(250);
+  await sleep(1000);
 
   new_word();
 

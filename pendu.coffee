@@ -73,7 +73,7 @@ create_keyboard = ->
         btn.style.padding = '5px 14px'
         btn.style.fontSize = '16px'
         btn.style.cursor = 'pointer'
-        #~ btn.style.backgroundColor = btn.style.backgroundColor
+        #~ btn.style.backgroundColor = any color here
         if letter.length == 1 then state.keyboardKeys.push btn   # record each key reference
         btn.onclick = ->
             switch letter
@@ -99,7 +99,6 @@ create_keyboard = ->
 # ----------------------------------------------------------------------
 reveal = (letter) ->
     collator = new Intl.Collator('fr', { sensitivity: 'base' })
-
     revealed = state.revealedWord.split('')
 
     for ch, index in state.hiddenWord
@@ -139,7 +138,7 @@ reveal_word = ->
     else
         do ->
             result = await askConfirm("Attention", "question", 
-            "Révéler le mot caché terminera cette partie.<br><br>Êtes-vous certain?")
+                "Révéler le mot caché terminera cette partie.<br><br>Êtes-vous certain?")
 
             if result.isConfirmed
                 # disable all alphabetic virtual keys
@@ -164,7 +163,7 @@ generate_new_word = ->
     key.disabled = false for key in state.keyboardKeys
 
     do -> await showAlert("Partie no: #{state.gamesCounter}", "", "center",
-      "Mot caché de #{state.hiddenWord.length} lettres.")
+        "Mot caché de #{state.hiddenWord.length} lettres.")
 
     document.getElementById('theImage').src = "pendu/pendu_0.png"
     update_labels()
@@ -176,10 +175,8 @@ new_word = ->
     else
         do ->
             result = await askConfirm("Attention", "question", 
-            "Êtes-vous certain de commencer avec un nouveau mot?")
-
-            if result.isConfirmed
-                generate_new_word()
+                "Êtes-vous certain de commencer avec un nouveau mot?")
+            if result.isConfirmed then generate_new_word()
 
 # --------------------- start game ----------------------
 
@@ -187,5 +184,5 @@ update_labels()
 document.getElementById('theImage').src = "pendu/pendu_splash.png"
 create_keyboard()
 
-await sleep 250
+await sleep 1000
 new_word()
