@@ -37,8 +37,8 @@ sleep = (ms) ->
     new Promise (resolve) -> setTimeout resolve, ms
 
 # --------------------------------------
-update_labels = ->
-    topList = document.getElementById 'top-list'
+show_labels = ->
+    topList = document.getElementById('top-list')
     prefix = '<li><kbd style="font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;'
     
     labels  = "#{prefix}Partie no: #{state.gamesCounter}</kbd></li>"
@@ -50,10 +50,10 @@ update_labels = ->
 
 # --------------------------------------
 create_keyboard = ->
-    footer = document.getElementById 'footer'
+    footer = document.getElementById('footer')
 
     # Create keyboard container
-    keyboard = document.createElement 'div'
+    keyboard = document.createElement('div')
     keyboard.style.marginTop = '10px'
     footer.appendChild keyboard
 
@@ -67,14 +67,15 @@ create_keyboard = ->
 
     # Function to create a key button
     createKey = (letter) ->
-        btn = document.createElement 'button'
+        btn = document.createElement('button')
         btn.textContent = letter.toUpperCase()
         btn.style.margin = '2px'
         btn.style.padding = '5px 14px'
         btn.style.fontSize = '16px'
         btn.style.cursor = 'pointer'
         #~ btn.style.backgroundColor = any color here
-        if letter.length == 1 then state.keyboardKeys.push btn   # record each key reference
+        if letter.length == 1 or letter == "Révéler mot"
+            state.keyboardKeys.push btn   # record key reference
         btn.onclick = ->
             switch letter
                 when "Au sujet"
@@ -90,7 +91,7 @@ create_keyboard = ->
 
     # Generate keys row-wise
     for row in rows
-        rowDiv = document.createElement 'div'
+        rowDiv = document.createElement('div')
         rowDiv.style.marginBottom = '5px'
         for letter in row
             rowDiv.appendChild createKey(letter)
@@ -106,7 +107,7 @@ reveal = (letter) ->
             revealed[index] = state.hiddenWord[index]
 
     state.revealedWord = revealed.join('')
-    update_labels()
+    show_labels()
 
 # --------------------------------------
 guess = (letter) ->
@@ -115,13 +116,13 @@ guess = (letter) ->
 
     if state.revealedWord is beforeReveal
         state.failsCounter++
-        update_labels()
+        show_labels()
         image_file = "pendu/pendu_#{state.failsCounter}.png"
         document.getElementById('theImage').src = image_file
 
     if state.failsCounter == 10
         state.revealedWord = state.hiddenWord
-        update_labels()
+        show_labels()
         key.disabled = true for key in state.keyboardKeys
         await sleep 250
         do -> await showAlert("Hélas!", "info", "center",
@@ -133,18 +134,15 @@ guess = (letter) ->
 
 # --------------------------------------
 reveal_word = ->
-    if state.revealedWord is state.hiddenWord
-        do -> await showAlert("Info", "", "center", "Le mot caché est déjà révélé.")
-    else
-        do ->
-            result = await askConfirm("Attention", "question", 
-                "Révéler le mot caché terminera cette partie.<br><br>Êtes-vous certain?")
+    do ->
+        result = await askConfirm("Attention", "question", 
+            "Révéler le mot caché terminera cette partie.<br><br>Êtes-vous certain?")
 
-            if result.isConfirmed
-                # disable all alphabetic virtual keys
-                key.disabled = true for key in state.keyboardKeys
-                state.revealedWord = state.hiddenWord
-                update_labels()
+        if result.isConfirmed
+            # disable all alphabetic virtual keys
+            key.disabled = true for key in state.keyboardKeys
+            state.revealedWord = state.hiddenWord
+            show_labels()
 
 # --------------------------------------
 generate_new_word = ->
@@ -166,7 +164,7 @@ generate_new_word = ->
         "Mot caché de #{state.hiddenWord.length} lettres.")
 
     document.getElementById('theImage').src = "pendu/pendu_0.png"
-    update_labels()
+    show_labels()
 
 # --------------------------------------
 new_word = ->
@@ -180,8 +178,7 @@ new_word = ->
 
 # --------------------- start game ----------------------
 
-update_labels()
-document.getElementById('theImage').src = "pendu/pendu_splash.png"
+show_labels()
 create_keyboard()
 
 await sleep 1000
