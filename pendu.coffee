@@ -147,7 +147,11 @@ reveal_word = ->
 # --------------------------------------
 generate_new_word = ->
     # pick a random word from words[] array defined in pendu_mots.js file
-    state.hiddenWord = WORDS[Math.floor(Math.random() * WORDS.length)].toLowerCase()
+    while true
+        state.hiddenWord = WORDS[Math.floor(Math.random() * WORDS.length)].toLowerCase()
+        # Avoid extra-long words, value subject to change
+        if state.hiddenWord.length <= 20 then break
+
     state.revealedWord = "*".repeat(state.hiddenWord.length)
 
     reveal "("
