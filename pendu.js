@@ -51,14 +51,15 @@
 
   // --------------------------------------
   show_labels = function() {
-    var labels, prefix, topList;
-    topList = document.getElementById('top-list');
-    prefix = '<li><kbd style="font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;';
+    var labels, prefix, s, scores;
+    scores = document.getElementById('scores');
+    s = "&nbsp;";
+    prefix = '<li><kbd style="font-size: 16px;">' + `${s}${s}${s}${s}`;
     labels = `${prefix}Partie no: ${state.gamesCounter}</kbd></li>`;
     labels += `${prefix}Mot caché: ${state.revealedWord}</kbd></li>`;
-    labels += `${prefix}&nbsp;&nbsp;&nbsp;Échecs: ${state.failsCounter}</kbd></li>`;
-    labels += "<li>&nbsp;</li>";
-    return topList.innerHTML = labels;
+    labels += `${prefix}${s}${s}${s}Échecs: ${state.failsCounter}</kbd></li>`;
+    labels += `<li>${s}</li>`;
+    return scores.innerHTML = labels;
   };
 
   // --------------------------------------
@@ -70,7 +71,7 @@
     keyboard.style.marginTop = '10px';
     footer.appendChild(keyboard);
     // Define rows of alphabet keys
-    rows = [['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'], ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'], ['z', 'x', 'c', 'v', 'b', 'n', 'm'], ['Au sujet', 'Nouveau mot', 'Révéler mot']];
+    rows = [['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'], ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'], ['z', 'x', 'c', 'v', 'b', 'n', 'm'], ['Nouveau mot', 'Révéler mot', 'Au sujet']];
     // Function to create a key button
     createKey = function(letter) {
       var btn;
@@ -143,7 +144,7 @@
       state.failsCounter++;
       show_labels();
       image_file = `pendu/pendu_${state.failsCounter}.png`;
-      document.getElementById('theImage').src = image_file;
+      document.getElementById('gallows').src = image_file;
     }
     if (state.failsCounter === 10) {
       state.revealedWord = state.hiddenWord;
@@ -194,7 +195,7 @@
     // pick a random word from words[] array defined in pendu_mots.js file
     while (true) {
       state.hiddenWord = WORDS[Math.floor(Math.random() * WORDS.length)].toLowerCase();
-      // Avoid extra-long words
+      // Avoid extra-long words, value subject to change
       if (state.hiddenWord.length <= 20) {
         break;
       }
@@ -212,9 +213,9 @@
       key.disabled = false;
     }
     (async function() {
-      return (await showAlert(`Partie no: ${state.gamesCounter}`, "", "center", `Mot caché de ${state.hiddenWord.length} lettres.`));
+      return (await showAlert(`Partie no. ${state.gamesCounter}`, "", "center", `Mot caché de ${state.hiddenWord.length} lettres.`));
     })();
-    document.getElementById('theImage').src = "pendu/pendu_0.png";
+    document.getElementById('gallows').src = "pendu/pendu_0.png";
     return show_labels();
   };
 

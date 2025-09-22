@@ -2,23 +2,23 @@ body {
 background-color: LightCyan;
 }
 
-#top {
+#header {
   width: 350px;
   margin: 0 auto;
   text-align: left;
 }
 
-#top-list {
+#scores {
   list-style-type: none;
   padding-left: 0;
   margin: 0;
 }
 
-#picture {
+#stage {
   text-align: center;
 }
 
-#theImage {
+#gallows {
   border: 2px solid black;
 }
 

@@ -38,15 +38,16 @@ sleep = (ms) ->
 
 # --------------------------------------
 show_labels = ->
-    topList = document.getElementById('top-list')
-    prefix = '<li><kbd style="font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;'
-    
+    scores = document.getElementById('scores')
+    s = "&nbsp;"
+    prefix = '<li><kbd style="font-size: 16px;">' + "#{s}#{s}#{s}#{s}"
+
     labels  = "#{prefix}Partie no: #{state.gamesCounter}</kbd></li>"
     labels += "#{prefix}Mot caché: #{state.revealedWord}</kbd></li>"
-    labels += "#{prefix}&nbsp;&nbsp;&nbsp;Échecs: #{state.failsCounter}</kbd></li>"
-    labels += "<li>&nbsp;</li>"
+    labels += "#{prefix}#{s}#{s}#{s}Échecs: #{state.failsCounter}</kbd></li>"
+    labels += "<li>#{s}</li>"
     
-    topList.innerHTML = labels
+    scores.innerHTML = labels
 
 # --------------------------------------
 create_keyboard = ->
@@ -62,7 +63,7 @@ create_keyboard = ->
         ['q','w','e','r','t','y','u','i','o','p']
         ['a','s','d','f','g','h','j','k','l']
         ['z','x','c','v','b','n','m']
-        ['Au sujet', 'Nouveau mot', 'Révéler mot']
+        ['Nouveau mot', 'Révéler mot','Au sujet']
     ]
 
     # Function to create a key button
@@ -118,7 +119,7 @@ guess = (letter) ->
         state.failsCounter++
         show_labels()
         image_file = "pendu/pendu_#{state.failsCounter}.png"
-        document.getElementById('theImage').src = image_file
+        document.getElementById('gallows').src = image_file
 
     if state.failsCounter == 10
         state.revealedWord = state.hiddenWord
@@ -164,10 +165,10 @@ generate_new_word = ->
     # enable all alphabetic virtual keys
     key.disabled = false for key in state.keyboardKeys
 
-    do -> await showAlert("Partie no: #{state.gamesCounter}", "", "center",
+    do -> await showAlert("Partie no. #{state.gamesCounter}", "", "center",
         "Mot caché de #{state.hiddenWord.length} lettres.")
 
-    document.getElementById('theImage').src = "pendu/pendu_0.png"
+    document.getElementById('gallows').src = "pendu/pendu_0.png"
     show_labels()
 
 # --------------------------------------
