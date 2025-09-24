@@ -1,13 +1,13 @@
 # https://ronlinu.github.io/pendu
 
 state =
-    gamesCounter : 0
     revealedWord : ''
+    hiddenWord   : ''
+    gamesCounter : 0
     failsCounter : 0
 
-    hiddenWord   : ''
     keyboardKeys : []
-    newGameKey   : null
+    gameKey      : null
 
 # --------------------------------------
 askConfirm = (title, icon, message) ->
@@ -65,36 +65,41 @@ create_keyboard = ->
         ['Q','W','E','R','T','Y','U','I','O','P']
         ['A','S','D','F','G','H','J','K','L']
         ['Z','X','C','V','B','N','M']
-        ['COMMENCER', 'RÉVÉLER MOT', 'AU SUJET']
+        ['COMMENCER', 'AU SUJET']
     ]
 
     # Function to create a key button
     createKey = (letter) ->
         btn = document.createElement('button')
         btn.textContent = letter
-        btn.style.margin = '2px'
-        btn.style.padding = '5px 14px'
-        btn.style.fontSize = '16px'
         btn.style.cursor = 'pointer'
-        
-        if letter.length == 1 or letter == 'RÉVÉLER MOT'
-            state.keyboardKeys.push btn   # record key reference
+
+        if letter.length == 1
+            state.keyboardKeys.push btn   # record letter key reference
+            btn.style.margin = '2px'
+            btn.style.padding = '5px 14px'
+            btn.style.fontSize = '16px'
             btn.disabled = true;
-        else if letter == "COMMENCER"
-            state.newGameKey = btn
-            
+        else if letter == 'COMMENCER'
+            state.gameKey = btn         # record game key reference
+            btn.style.margin = '5px'
+            btn.style.padding = '5px 16px'
+            btn.style.fontSize = '16px'
+        else
+            btn.style.margin = '5px'
+            btn.style.padding = '5px 16px'
+            btn.style.fontSize = '16px'
+
         btn.onclick = ->
             switch letter
                 when 'COMMENCER'
-                    new_word()
-                when 'RÉVÉLER MOT'
-                    reveal_word()
+                    play()
                 when 'AU SUJET'
                     do -> await showAlert('Au sujet de Pendu', '', 'left', AIDE)
                 else
                     btn.disabled = true
                     guess letter
-        btn
+        return btn
 
     # Generate keys row-wise
     for row in rows
@@ -106,7 +111,7 @@ create_keyboard = ->
 
 # ----------------------------------------------------------------------
 reveal = (letter) ->
-    collator = new Intl.Collator('fr', { sensitivity: 'base' })
+    collator = new Intl.Collator('fr', {sensitivity: 'base'})
     revealed = state.revealedWord.split('')
 
     for ch, index in state.hiddenWord
@@ -130,13 +135,15 @@ guess = (letter) ->
     if state.failsCounter == 10
         state.revealedWord = state.hiddenWord
         show_labels()
+        state.gameKey.textContent = 'NOUVEAU MOT'
         key.disabled = true for key in state.keyboardKeys
-        #~ await sleep 250
+
         do -> await showAlert('Hélas!', 'info', 'center',
             "Vous avez  perdu.<br><br>Le mot caché était: #{state.hiddenWord}")
+
     else if state.revealedWord is state.hiddenWord
         key.disabled = true for key in state.keyboardKeys
-        #~ await sleep 250
+        state.gameKey.textContent = 'NOUVEAU MOT'
         do -> await showAlert('Bravo!', 'info', 'center', "Vous avez gagné.")
 
 # --------------------------------------
@@ -149,6 +156,7 @@ reveal_word = ->
             # disable all virtual keys but "Au sujet" and "Nouveau mot"
             key.disabled = true for key in state.keyboardKeys
             state.revealedWord = state.hiddenWord
+            state.gameKey.textContent = 'NOUVEAU MOT'
             show_labels()
 
 # --------------------------------------
@@ -179,8 +187,8 @@ generate_new_word = ->
 
 # --------------------------------------
 new_word = ->
-    state.newGameKey.textContent = "NOUVEAU MOT"
-    
+    state.gameKey.textContent = 'RÉVÉLER MOT'
+
     if state.revealedWord is state.hiddenWord
         generate_new_word()
     else
@@ -189,7 +197,14 @@ new_word = ->
                 'Êtes-vous certain de commencer avec un nouveau mot?')
             if result.isConfirmed then generate_new_word()
 
-# --------------------- start game ----------------------
+# --------------------------------------
+play = ->
+    switch state.gameKey.textContent
+        when 'COMMENCER', 'NOUVEAU MOT'
+            new_word()
+        when 'RÉVÉLER MOT'
+            reveal_word()
 
+# --------------------- Make game ready ----------------------
 show_labels()
 create_keyboard()
