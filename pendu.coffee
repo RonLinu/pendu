@@ -24,15 +24,18 @@ askConfirm = (title, icon, message) ->
             popup: 'custom-popup-position'
 
 # --------------------------------------
-showAlert = (title, icon, align, message) ->
-    Swal.fire
-        title: title
-        html: "<div style='text-align: #{align};'>#{message}</div>"
-        icon: icon
-        confirmButtonText: 'OK'
-        position: 'top'
-        customClass:
-            popup: 'custom-popup-position'
+showAlert = (title, icon, align, msg) ->
+    new Promise (resolve) ->
+        Swal.fire
+            title: title
+            html: "<div style='text-align: #{align}; font-size: 16px;'>#{msg}</div>"
+            icon: icon
+            confirmButtonText: 'OK'
+            position: 'center'
+            animation: true
+            customClass:
+                popup: 'custom-popup-position'
+            willClose: resolve
 
 # --------------------------------------
 sleep = (ms) ->
@@ -95,7 +98,7 @@ create_keyboard = ->
                 when 'COMMENCER'
                     play()
                 when 'AU SUJET'
-                    do -> await showAlert('Au sujet de Pendu', '', 'left', AIDE)
+                    showAlert('Au sujet de Pendu', '', 'left', AIDE)
                 else
                     btn.disabled = true
                     guess letter
@@ -138,13 +141,13 @@ guess = (letter) ->
         state.gameKey.textContent = 'NOUVEAU MOT'
         key.disabled = true for key in state.keyboardKeys
 
-        do -> await showAlert('Hélas!', 'info', 'center',
+        showAlert('Hélas!', 'info', 'center',
             "Vous avez  perdu.<br><br>Le mot caché était: #{state.hiddenWord}")
 
     else if state.revealedWord is state.hiddenWord
         key.disabled = true for key in state.keyboardKeys
         state.gameKey.textContent = 'NOUVEAU MOT'
-        do -> await showAlert('Bravo!', 'info', 'center', "Vous avez gagné.")
+        showAlert('Bravo!', 'info', 'center', "Vous avez gagné.")
 
 # --------------------------------------
 reveal_word = ->
@@ -179,7 +182,7 @@ generate_new_word = ->
     # enable all alphabetic virtual keys
     key.disabled = false for key in state.keyboardKeys
 
-    do -> await showAlert("Partie no. #{state.gamesCounter}", '', 'center',
+    showAlert("Partie no. #{state.gamesCounter}", '', 'center',
         "Mot caché de #{state.hiddenWord.length} lettres.")
 
     document.getElementById('gallows').src = 'pendu/pendu_0.png'
