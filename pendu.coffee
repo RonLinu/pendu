@@ -19,9 +19,7 @@ askConfirm = (title, icon, message) ->
         confirmButtonText: 'Oui'
         cancelButtonText: 'Non'
         focusCancel: true
-        position: 'top'
-        customClass:
-            popup: 'custom-popup-position'
+        position: 'center'
 
 # --------------------------------------
 showAlert = (title, icon, align, msg) ->
@@ -33,8 +31,8 @@ showAlert = (title, icon, align, msg) ->
             confirmButtonText: 'OK'
             position: 'center'
             animation: true
-            customClass:
-                popup: 'custom-popup-position'
+            #~ customClass:
+                #~ popup: 'custom-popup-position'
             willClose: resolve
 
 # --------------------------------------
