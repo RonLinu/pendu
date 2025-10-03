@@ -29,10 +29,8 @@ showAlert = (title, icon, align, msg) ->
             html: "<div style='text-align: #{align}; font-size: 16px;'>#{msg}</div>"
             icon: icon
             confirmButtonText: 'OK'
-            position: 'center'
+            position: align
             animation: true
-            #~ customClass:
-                #~ popup: 'custom-popup-position'
             willClose: resolve
 
 # --------------------------------------
@@ -76,7 +74,7 @@ create_keyboard = ->
         btn.style.cursor = 'pointer'
 
         if letter.length == 1
-            state.keyboardKeys.push btn   # record letter key reference
+            state.keyboardKeys.push btn   # record alpha key reference
             btn.style.margin = '2px'
             btn.style.padding = '5px 14px'
             btn.style.fontSize = '16px'
@@ -136,12 +134,11 @@ guess = (letter) ->
     if state.failsCounter == 10
         state.revealedWord = state.hiddenWord
         show_labels()
-        state.gameKey.textContent = 'NOUVEAU MOT'
         key.disabled = true for key in state.keyboardKeys
-
-        showAlert('Hélas!', 'info', 'center',
-            "Vous avez  perdu.<br><br>Le mot caché était: #{state.hiddenWord}")
-
+        state.gameKey.textContent = 'NOUVEAU MOT'
+        
+        showAlert('Vous avez perdu!', 'info', 'center',
+                "Le mot caché était: #{state.hiddenWord}")
     else if state.revealedWord is state.hiddenWord
         key.disabled = true for key in state.keyboardKeys
         state.gameKey.textContent = 'NOUVEAU MOT'
@@ -151,10 +148,10 @@ guess = (letter) ->
 reveal_word = ->
     do ->
         result = await askConfirm('Attention', 'question',
-            'Révéler le mot caché terminera cette partie.<br><br>Êtes-vous certain?')
+        'Révéler le mot caché terminera cette partie.<br><br>Êtes-vous certain?')
 
         if result.isConfirmed
-            # disable all virtual keys but "Au sujet" and "Nouveau mot"
+            # disable all virtual alphabetical keys
             key.disabled = true for key in state.keyboardKeys
             state.revealedWord = state.hiddenWord
             state.gameKey.textContent = 'NOUVEAU MOT'
@@ -165,7 +162,7 @@ generate_new_word = ->
     # pick a random word from WORDS[] array defined in pendu_mots.js file
     while true
         state.hiddenWord = WORDS[Math.floor(Math.random() * WORDS.length)].toLowerCase()
-        # Avoid extra-long words, value subject to change
+        # Avoid extra-long words (limit subject to change...)
         if state.hiddenWord.length <= 20 then break
 
     state.revealedWord = '*'.repeat(state.hiddenWord.length)
@@ -177,35 +174,24 @@ generate_new_word = ->
     state.gamesCounter++
     state.failsCounter = 0
 
-    # enable all alphabetic virtual keys
+    # enable all virtual alphabetic keys
     key.disabled = false for key in state.keyboardKeys
 
     showAlert("Partie no. #{state.gamesCounter}", '', 'center',
-        "Mot caché de #{state.hiddenWord.length} lettres.")
+        "Mot caché de #{state.hiddenWord.length} lettres")
 
     document.getElementById('gallows').src = 'pendu/pendu_0.png'
     show_labels()
-
-# --------------------------------------
-new_word = ->
     state.gameKey.textContent = 'RÉVÉLER MOT'
-
-    if state.revealedWord is state.hiddenWord
-        generate_new_word()
-    else
-        do ->
-            result = await askConfirm('Attention', 'question',
-                'Êtes-vous certain de commencer avec un nouveau mot?')
-            if result.isConfirmed then generate_new_word()
 
 # --------------------------------------
 play = ->
     switch state.gameKey.textContent
         when 'COMMENCER', 'NOUVEAU MOT'
-            new_word()
+            generate_new_word()
         when 'RÉVÉLER MOT'
             reveal_word()
 
-# --------------------- Make game ready ----------------------
+# ------------------------ Get game ready ----------------------------
 show_labels()
 create_keyboard()
