@@ -43,10 +43,10 @@ show_labels = ->
     s = '&nbsp;'
     prefix = '<li><kbd style="font-size: 16px;">' + "#{s}#{s}#{s}#{s}"
 
-    labels  = "#{prefix}Partie no: #{state.gamesCounter}</kbd></li>"
-    labels += "#{prefix}Mot caché: #{state.revealedWord}</kbd></li>"
-    labels += "#{prefix}#{s}#{s}#{s}Échecs: #{state.failsCounter}</kbd></li>"
-    labels += "<li>#{s}</li>"
+    labels  = "#{prefix}Partie no: #{state.gamesCounter}</kbd>"
+    labels += "#{prefix}Mot caché: #{state.revealedWord}</kbd>"
+    labels += "#{prefix}#{s}#{s}#{s}Échecs: #{state.failsCounter}</kbd>"
+    labels += "#{prefix}"
 
     scores.innerHTML = labels
 
@@ -67,7 +67,7 @@ create_keyboard = ->
         ['COMMENCER', 'AU SUJET']
     ]
 
-    # Function to create a key button
+    # ----- Local function to create a key button
     createKey = (letter) ->
         btn = document.createElement('button')
         btn.textContent = letter
@@ -99,7 +99,7 @@ create_keyboard = ->
                     btn.disabled = true
                     guess letter
         return btn
-
+    
     # Generate keys row-wise
     for row in rows
         rowDiv = document.createElement('div')
