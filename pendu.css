@@ -1,11 +1,14 @@
+
 body {
-  background-color: LightCyan;
+  background-color: RoyalBlue;
 }
 
 #header {
   width: 350px;
   margin: 0 auto;
   text-align: left;
+  color: lightcyan;
+  font-weight: normal;
 }
 
 #scores {

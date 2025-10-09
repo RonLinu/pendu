@@ -3,8 +3,8 @@
 state =
     revealedWord : ''
     hiddenWord   : ''
-    gamesCounter : 0
-    failsCounter : 0
+    gamesCounter : ''   # does not show zero
+    failsCounter : ''   # same
 
     keyboardKeys : []
     gameKey      : null
@@ -61,9 +61,12 @@ create_keyboard = ->
 
     # Define rows of alphabet keys
     rows = [
-        ['Q','W','E','R','T','Y','U','I','O','P']
-        ['A','S','D','F','G','H','J','K','L']
-        ['Z','X','C','V','B','N','M']
+        #~ ['Q','W','E','R','T','Y','U','I','O','P']
+        #~ ['A','S','D','F','G','H','J','K','L']
+        #~ ['Z','X','C','V','B','N','M']
+        ['A','B','C','D','E','F','G','H','I']
+        ['J','K','L','M','N','O','P','Q','R']
+        ['S','T','U','V','W','X','Y','Z']
         ['COMMENCER', 'AU SUJET']
     ]
 
@@ -78,16 +81,19 @@ create_keyboard = ->
             btn.style.margin = '2px'
             btn.style.padding = '5px 14px'
             btn.style.fontSize = '16px'
+            #~ btn.style.background = 'lightgray'
             btn.disabled = true;
         else if letter == 'COMMENCER'
             state.gameKey = btn         # record game key reference
             btn.style.margin = '5px'
             btn.style.padding = '5px 16px'
             btn.style.fontSize = '16px'
+            btn.style.background = 'lightgray'
         else
             btn.style.margin = '5px'
             btn.style.padding = '5px 16px'
             btn.style.fontSize = '16px'
+            btn.style.background = 'lightgray'
 
         btn.onclick = ->
             switch letter
@@ -172,7 +178,7 @@ generate_new_word = ->
     reveal '-'
 
     state.gamesCounter++
-    state.failsCounter = 0
+    state.failsCounter = ''
 
     # enable all virtual alphabetic keys
     key.disabled = false for key in state.keyboardKeys
