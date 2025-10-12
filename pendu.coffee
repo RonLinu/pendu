@@ -1,6 +1,6 @@
 # https://ronlinu.github.io/pendu
 
-state =
+game =
     revealedWord : ''
     hiddenWord   : ''
     gamesCounter : ''   # does not show zero
@@ -22,14 +22,14 @@ askConfirm = (title, icon, message) ->
         position: 'center'
 
 # --------------------------------------
-showAlert = (title, icon, align, msg) ->
+showAlert = (title, icon, textalign, msg) ->
     new Promise (resolve) ->
         Swal.fire
             title: title
-            html: "<div style='text-align: #{align}; font-size: 16px;'>#{msg}</div>"
+            html: "<div style='text-align: #{textalign}; font-size: 16px;'>#{msg}</div>"
             icon: icon
             confirmButtonText: 'OK'
-            position: align
+            position: 'center'
             animation: true
             willClose: resolve
 
@@ -43,9 +43,9 @@ show_labels = ->
     s = '&nbsp;'
     prefix = '<li><kbd style="font-size: 16px;">' + "#{s}#{s}#{s}#{s}"
 
-    labels  = "#{prefix}Partie no: #{state.gamesCounter}</kbd>"
-    labels += "#{prefix}Mot caché: #{state.revealedWord}</kbd>"
-    labels += "#{prefix}#{s}#{s}#{s}Échecs: #{state.failsCounter}</kbd>"
+    labels  = "#{prefix}Partie no: #{game.gamesCounter}</kbd>"
+    labels += "#{prefix}Mot caché: #{game.revealedWord}</kbd>"
+    labels += "#{prefix}#{s}#{s}#{s}Échecs: #{game.failsCounter}</kbd>"
     #~ labels += "#{prefix}"
 
     scores.innerHTML = labels
@@ -61,9 +61,6 @@ create_keyboard = ->
 
     # Define rows of alphabet keys
     rows = [
-        #~ ['Q','W','E','R','T','Y','U','I','O','P']
-        #~ ['A','S','D','F','G','H','J','K','L']
-        #~ ['Z','X','C','V','B','N','M']
         ['A','B','C','D','E','F','G']
         ['H','I','J','K','L','M','N']
         ['O','P','Q','R','S','T','U']
@@ -78,14 +75,13 @@ create_keyboard = ->
         btn.style.cursor = 'pointer'
 
         if letter.length == 1
-            state.keyboardKeys.push btn   # record alpha key reference
+            game.keyboardKeys.push btn   # record alpha key reference
             btn.style.margin = '2px'
             btn.style.padding = '5px 14px'
             btn.style.fontSize = '16px'
-            #~ btn.style.background = 'lightgray'
             btn.disabled = true;
         else if letter == 'COMMENCER'
-            state.gameKey = btn         # record game key reference
+            game.gameKey = btn         # record game key reference
             btn.style.margin = '5px'
             btn.style.padding = '5px 16px'
             btn.style.fontSize = '16px'
@@ -118,37 +114,37 @@ create_keyboard = ->
 # ----------------------------------------------------------------------
 reveal = (letter) ->
     collator = new Intl.Collator('fr', {sensitivity: 'base'})
-    revealed = state.revealedWord.split('')
+    revealed = game.revealedWord.split('')
 
-    for ch, index in state.hiddenWord
+    for ch, index in game.hiddenWord
         if collator.compare(ch, letter) == 0
-            revealed[index] = state.hiddenWord[index]
+            revealed[index] = game.hiddenWord[index]
 
-    state.revealedWord = revealed.join('')
+    game.revealedWord = revealed.join('')
 
 # --------------------------------------
 guess = (letter) ->
-    beforeReveal = state.revealedWord
+    beforeReveal = game.revealedWord
     reveal letter
     show_labels()
 
-    if state.revealedWord is beforeReveal
-        state.failsCounter++
+    if game.revealedWord is beforeReveal
+        game.failsCounter++
         show_labels()
-        image_file = "pendu/pendu_#{state.failsCounter}.png"
+        image_file = "pendu/pendu_#{pendu.failsCounter}.png"
         document.getElementById('gallows').src = image_file
 
-    if state.failsCounter == 10
-        state.revealedWord = state.hiddenWord
+    if game.failsCounter == 10
+        game.revealedWord = game.hiddenWord
         show_labels()
-        key.disabled = true for key in state.keyboardKeys
-        state.gameKey.textContent = 'NOUVEAU MOT'
+        key.disabled = true for key in game.keyboardKeys
+        game.gameKey.textContent = 'NOUVEAU MOT'
         
         showAlert('Vous avez perdu!', 'info', 'center',
-                "Le mot caché était: #{state.hiddenWord}")
-    else if state.revealedWord is state.hiddenWord
-        key.disabled = true for key in state.keyboardKeys
-        state.gameKey.textContent = 'NOUVEAU MOT'
+                "Le mot caché était: #{game.hiddenWord}")
+    else if game.revealedWord is game.hiddenWord
+        key.disabled = true for key in game.keyboardKeys
+        game.gameKey.textContent = 'NOUVEAU MOT'
         showAlert('Bravo!', 'info', 'center', "Vous avez gagné.")
 
 # --------------------------------------
@@ -159,41 +155,41 @@ reveal_word = ->
 
         if result.isConfirmed
             # disable all virtual alphabetical keys
-            key.disabled = true for key in state.keyboardKeys
-            state.revealedWord = state.hiddenWord
-            state.gameKey.textContent = 'NOUVEAU MOT'
+            key.disabled = true for key in game.keyboardKeys
+            game.revealedWord = game.hiddenWord
+            game.gameKey.textContent = 'NOUVEAU MOT'
             show_labels()
 
 # --------------------------------------
 generate_new_word = ->
     # pick a random word from WORDS[] array defined in pendu_mots.js file
     while true
-        state.hiddenWord = WORDS[Math.floor(Math.random() * WORDS.length)].toLowerCase()
+        game.hiddenWord = WORDS[Math.floor(Math.random() * WORDS.length)].toLowerCase()
         # Avoid extra-long words (limit subject to change...)
-        if state.hiddenWord.length <= 20 then break
+        if game.hiddenWord.length <= 20 then break
 
-    state.revealedWord = '*'.repeat(state.hiddenWord.length)
+    game.revealedWord = '*'.repeat(game.hiddenWord.length)
 
     reveal '('
     reveal ')'
     reveal '-'
 
-    state.gamesCounter++
-    state.failsCounter = ''
+    game.gamesCounter++
+    game.failsCounter = ''
 
     # enable all virtual alphabetic keys
-    key.disabled = false for key in state.keyboardKeys
+    key.disabled = false for key in game.keyboardKeys
 
-    showAlert("Partie no. #{state.gamesCounter}", '', 'center',
-        "Mot caché de #{state.hiddenWord.length} lettres")
+    showAlert("Partie no. #{game.gamesCounter}", '', 'center',
+        "Mot caché de #{game.hiddenWord.length} lettres")
 
     document.getElementById('gallows').src = 'pendu/pendu_0.png'
     show_labels()
-    state.gameKey.textContent = 'RÉVÉLER MOT'
+    game.gameKey.textContent = 'RÉVÉLER MOT'
 
 # --------------------------------------
 play = ->
-    switch state.gameKey.textContent
+    switch game.gameKey.textContent
         when 'COMMENCER', 'NOUVEAU MOT'
             generate_new_word()
         when 'RÉVÉLER MOT'
