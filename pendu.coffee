@@ -10,48 +10,7 @@ game =
     gameKey      : null
 
 # --------------------------------------
-askConfirm = (title, icon, message) ->
-    Swal.fire
-        title: title
-        html: message
-        icon: icon
-        showCancelButton: true
-        confirmButtonText: 'Oui'
-        cancelButtonText: 'Non'
-        focusCancel: true
-        position: 'center'
-
-# --------------------------------------
-showAlert = (title, icon, textalign, msg) ->
-    new Promise (resolve) ->
-        Swal.fire
-            title: title
-            html: "<div style='text-align: #{textalign}; font-size: 16px;'>#{msg}</div>"
-            icon: icon
-            confirmButtonText: 'OK'
-            position: 'center'
-            animation: true
-            willClose: resolve
-
-# --------------------------------------
-sleep = (ms) ->
-    new Promise (resolve) -> setTimeout resolve, ms
-
-# --------------------------------------
-show_labels = ->
-    scores = document.getElementById('scores')
-    s = '&nbsp;'
-    prefix = '<li><kbd style="font-size: 16px;">' + "#{s}#{s}#{s}#{s}"
-
-    labels  = "#{prefix}Partie no: #{game.gamesCounter}</kbd>"
-    labels += "#{prefix}Mot caché: #{game.revealedWord}</kbd>"
-    labels += "#{prefix}#{s}#{s}#{s}Échecs: #{game.failsCounter}</kbd>"
-    #~ labels += "#{prefix}"
-
-    scores.innerHTML = labels
-
-# --------------------------------------
-create_keyboard = ->
+do ->       # Create the keyboard with its event handlers
     footer = document.getElementById('footer')
 
     # Create keyboard container
@@ -111,7 +70,43 @@ create_keyboard = ->
             rowDiv.appendChild createKey(letter)
         keyboard.appendChild rowDiv
 
-# ----------------------------------------------------------------------
+# --------------------------------------
+showAlert = (title, icon, textalign, msg) ->
+    new Promise (resolve) ->
+        Swal.fire
+            title: title
+            html: "<div style='text-align: #{textalign}; font-size: 16px;'>#{msg}</div>"
+            icon: icon
+            confirmButtonText: 'OK'
+            position: 'center'
+            animation: true
+            willClose: resolve
+
+# --------------------------------------
+askConfirm = (title, icon, message) ->
+    Swal.fire
+        title: title
+        html: message
+        icon: icon
+        showCancelButton: true
+        confirmButtonText: 'Oui'
+        cancelButtonText: 'Non'
+        focusCancel: true
+        position: 'center'
+
+# --------------------------------------
+show_labels = ->
+    scores = document.getElementById('scores')
+    s = '&nbsp;'
+    prefix = '<li><kbd style="font-size: 16px;">' + "#{s}#{s}#{s}#{s}"
+
+    labels  = "#{prefix}Partie no: #{game.gamesCounter}</kbd>"
+    labels += "#{prefix}Mot caché: #{game.revealedWord}</kbd>"
+    labels += "#{prefix}#{s}#{s}#{s}Échecs: #{game.failsCounter}</kbd>"
+
+    scores.innerHTML = labels
+
+# -------------------------------------
 reveal = (letter) ->
     collator = new Intl.Collator('fr', {sensitivity: 'base'})
     revealed = game.revealedWord.split('')
@@ -194,7 +189,3 @@ play = ->
             generate_new_word()
         when 'RÉVÉLER MOT'
             reveal_word()
-
-# ------------------------ Get game ready ----------------------------
-show_labels()
-create_keyboard()
