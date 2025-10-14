@@ -77,16 +77,13 @@
 
   // --------------------------------------
   showAlert = function(title, icon, textalign, msg) {
-    return new Promise(function(resolve) {
-      return Swal.fire({
-        title: title,
-        html: `<div style='text-align: ${textalign}; font-size: 16px;'>${msg}</div>`,
-        icon: icon,
-        confirmButtonText: 'OK',
-        position: 'center',
-        animation: true,
-        willClose: resolve
-      });
+    return Swal.fire({
+      title: title,
+      html: `<div style='text-align: ${textalign}; font-size: 16px;'>${msg}</div>`,
+      icon: icon,
+      confirmButtonText: 'OK',
+      position: 'center',
+      animation: true
     });
   };
 
@@ -167,22 +164,20 @@
   };
 
   // --------------------------------------
-  reveal_word = function() {
-    return (async function() {
-      var i, key, len, ref, result;
-      result = (await askConfirm('Attention', 'question', 'Révéler le mot caché terminera cette partie.<br><br>Êtes-vous certain?'));
-      if (result.isConfirmed) {
-        ref = game.keyboardKeys;
-        for (i = 0, len = ref.length; i < len; i++) {
-          key = ref[i];
-          // disable all virtual alphabetical keys
-          key.disabled = true;
-        }
-        game.revealedWord = game.hiddenWord;
-        game.gameKey.textContent = 'NOUVEAU MOT';
-        return show_labels();
+  reveal_word = async function() {
+    var i, key, len, ref, result;
+    result = (await askConfirm('Attention', 'question', 'Révéler le mot caché terminera cette partie.<br><br>Êtes-vous certain?'));
+    if (result.isConfirmed) {
+      ref = game.keyboardKeys;
+      for (i = 0, len = ref.length; i < len; i++) {
+        key = ref[i];
+        // disable all virtual alphabetical keys
+        key.disabled = true;
       }
-    })();
+      game.revealedWord = game.hiddenWord;
+      game.gameKey.textContent = 'NOUVEAU MOT';
+      return show_labels();
+    }
   };
 
   // --------------------------------------
@@ -208,10 +203,10 @@
       // enable all virtual alphabetic keys
       key.disabled = false;
     }
-    showAlert(`Partie no. ${game.gamesCounter}`, '', 'center', `Mot caché de ${game.hiddenWord.length} lettres`);
     document.getElementById('gallows').src = 'pendu/pendu_0.png';
     show_labels();
-    return game.gameKey.textContent = 'RÉVÉLER MOT';
+    game.gameKey.textContent = 'RÉVÉLER MOT';
+    return showAlert(`Partie no. ${game.gamesCounter}`, '', 'center', `Mot caché de ${game.hiddenWord.length} lettres`);
   };
 
   // --------------------------------------

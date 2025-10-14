@@ -72,15 +72,13 @@ do ->       # Create the keyboard with its event handlers
 
 # --------------------------------------
 showAlert = (title, icon, textalign, msg) ->
-    new Promise (resolve) ->
-        Swal.fire
-            title: title
-            html: "<div style='text-align: #{textalign}; font-size: 16px;'>#{msg}</div>"
-            icon: icon
-            confirmButtonText: 'OK'
-            position: 'center'
-            animation: true
-            willClose: resolve
+    Swal.fire
+        title: title
+        html: "<div style='text-align: #{textalign}; font-size: 16px;'>#{msg}</div>"
+        icon: icon
+        confirmButtonText: 'OK'
+        position: 'center'
+        animation: true
 
 # --------------------------------------
 askConfirm = (title, icon, message) ->
@@ -144,16 +142,15 @@ guess = (letter) ->
 
 # --------------------------------------
 reveal_word = ->
-    do ->
-        result = await askConfirm('Attention', 'question',
-        'Révéler le mot caché terminera cette partie.<br><br>Êtes-vous certain?')
+    result = await askConfirm('Attention', 'question',
+    'Révéler le mot caché terminera cette partie.<br><br>Êtes-vous certain?')
 
-        if result.isConfirmed
-            # disable all virtual alphabetical keys
-            key.disabled = true for key in game.keyboardKeys
-            game.revealedWord = game.hiddenWord
-            game.gameKey.textContent = 'NOUVEAU MOT'
-            show_labels()
+    if result.isConfirmed
+        # disable all virtual alphabetical keys
+        key.disabled = true for key in game.keyboardKeys
+        game.revealedWord = game.hiddenWord
+        game.gameKey.textContent = 'NOUVEAU MOT'
+        show_labels()
 
 # --------------------------------------
 generate_new_word = ->
@@ -175,12 +172,12 @@ generate_new_word = ->
     # enable all virtual alphabetic keys
     key.disabled = false for key in game.keyboardKeys
 
-    showAlert("Partie no. #{game.gamesCounter}", '', 'center',
-        "Mot caché de #{game.hiddenWord.length} lettres")
-
     document.getElementById('gallows').src = 'pendu/pendu_0.png'
     show_labels()
     game.gameKey.textContent = 'RÉVÉLER MOT'
+
+    showAlert("Partie no. #{game.gamesCounter}", '', 'center',
+        "Mot caché de #{game.hiddenWord.length} lettres")
 
 # --------------------------------------
 play = ->
