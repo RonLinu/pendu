@@ -124,7 +124,7 @@ guess = (letter) ->
     if game.revealedWord is beforeReveal
         game.failsCounter++
         show_labels()
-        image_file = "pendu/pendu_#{pendu.failsCounter}.png"
+        image_file = "pendu/pendu_#{game.failsCounter}.png"
         document.getElementById('gallows').src = image_file
 
     if game.failsCounter == 10
