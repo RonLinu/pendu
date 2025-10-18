@@ -143,7 +143,7 @@ guess = (letter) ->
 # --------------------------------------
 reveal_word = ->
     result = await askConfirm('Attention', 'question',
-    'Révéler le mot caché terminera cette partie.<br><br>Êtes-vous certain?')
+        'Révéler le mot caché terminera cette partie.<br><br>Êtes-vous certain?')
 
     if result.isConfirmed
         # disable all virtual alphabetical keys
