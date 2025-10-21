@@ -27,47 +27,42 @@ do ->       # Create the keyboard with its event handlers
         ['COMMENCER', 'AU SUJET']
     ]
 
-    # ----- Local function to create a key button
-    createKey = (letter) ->
+    # ----- Local function to create a virtual keyboard button
+    createButton = (buttonName) ->
         btn = document.createElement('button')
-        btn.textContent = letter
-        btn.style.cursor = 'pointer'
-
-        if letter.length == 1
-            game.keyboardKeys.push btn   # record alpha key reference
-            btn.style.margin = '2px'
-            btn.style.padding = '5px 14px'
-            btn.style.fontSize = '16px'
-            btn.disabled = true;
-        else if letter == 'COMMENCER'
-            game.gameKey = btn         # record game key reference
-            btn.style.margin = '5px'
-            btn.style.padding = '5px 16px'
-            btn.style.fontSize = '16px'
-            btn.style.background = 'lightgray'
-        else
-            btn.style.margin = '5px'
-            btn.style.padding = '5px 16px'
-            btn.style.fontSize = '16px'
-            btn.style.background = 'lightgray'
-
         btn.onclick = ->
-            switch letter
+            switch buttonName
                 when 'COMMENCER'
                     play()
                 when 'AU SUJET'
-                    showAlert('Au sujet de Pendu', '', 'left', AIDE)
+                    showAlert('Jeu de Pendu \u00A9', '', 'left', AIDE)
                 else
                     btn.disabled = true
-                    guess letter
+                    guess buttonName
+
+        btn.textContent = buttonName
+        btn.style.cursor = 'pointer'
+        btn.style.margin = '2px'
+        btn.style.padding = '5px 14px'
+        btn.style.fontSize = '16px'
+
+        if buttonName.length == 1
+            game.keyboardKeys.push btn   # record alpha key reference
+            btn.disabled = true;
+        else if buttonName == 'COMMENCER'
+            game.gameKey = btn         # record game key reference
+
         return btn
+    # ----------------------------------
     
-    # Generate keys row-wise
+    # Generate virtual keyboard
     for row in rows
         rowDiv = document.createElement('div')
         rowDiv.style.marginBottom = '5px'
-        for letter in row
-            rowDiv.appendChild createKey(letter)
+
+        for buttonName in row
+            rowDiv.appendChild createButton(buttonName)
+
         keyboard.appendChild rowDiv
 
 # --------------------------------------
