@@ -30,7 +30,7 @@ game = {
         case 'COMMENCER':
           return play();
         case 'AU SUJET':
-          return showAlert('Jeu de Pendu \u00A9', '', 'left', AIDE);
+          return showAlert('Jeu de Pendu', '', 'left', window.AIDE);
         default:
           btn.disabled = true;
           return guess(buttonName);
@@ -174,9 +174,9 @@ reveal_word = async function() {
 // --------------------------------------
 generate_new_word = function() {
   var i, key, len, ref;
-  // pick a random word from WORDS[] array defined in pendu_mots.js file
+  // pick random word from WORDS[] array defined in pendu_mots.js
   while (true) {
-    game.hiddenWord = WORDS[Math.floor(Math.random() * WORDS.length)].toLowerCase();
+    game.hiddenWord = window.WORDS[Math.floor(Math.random() * window.WORDS.length)].toLowerCase();
     // Avoid extra-long words (limit subject to change...)
     if (game.hiddenWord.length <= 20) {
       break;

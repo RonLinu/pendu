@@ -35,7 +35,7 @@ do ->       # Create the keyboard with its event handlers
                 when 'COMMENCER'
                     play()
                 when 'AU SUJET'
-                    showAlert('Jeu de Pendu \u00A9', '', 'left', AIDE)
+                    showAlert('Jeu de Pendu', '', 'left', window.AIDE)
                 else
                     btn.disabled = true
                     guess buttonName
@@ -147,11 +147,12 @@ reveal_word = ->
         game.gameKey.textContent = 'NOUVEAU MOT'
         show_labels()
 
+
 # --------------------------------------
 generate_new_word = ->
-    # pick a random word from WORDS[] array defined in pendu_mots.js file
+    # pick random word from WORDS[] array defined in pendu_mots.js
     while true
-        game.hiddenWord = WORDS[Math.floor(Math.random() * WORDS.length)].toLowerCase()
+        game.hiddenWord = window.WORDS[Math.floor(Math.random() * window.WORDS.length)].toLowerCase()
         # Avoid extra-long words (limit subject to change...)
         if game.hiddenWord.length <= 20 then break
 
