@@ -74,7 +74,8 @@ showAlert = function(title, icon, textalign, msg) {
     icon: icon,
     confirmButtonText: 'OK',
     position: 'center',
-    animation: true
+    animation: true,
+    allowOutsideClick: false
   });
 };
 
@@ -88,7 +89,8 @@ askConfirm = function(title, icon, message) {
     confirmButtonText: 'Oui',
     cancelButtonText: 'Non',
     focusCancel: true,
-    position: 'center'
+    position: 'center',
+    allowOutsideClick: false
   });
 };
 

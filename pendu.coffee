@@ -74,6 +74,7 @@ showAlert = (title, icon, textalign, msg) ->
         confirmButtonText: 'OK'
         position: 'center'
         animation: true
+        allowOutsideClick: false
 
 # --------------------------------------
 askConfirm = (title, icon, message) ->
@@ -86,6 +87,7 @@ askConfirm = (title, icon, message) ->
         cancelButtonText: 'Non'
         focusCancel: true
         position: 'center'
+        allowOutsideClick: false
 
 # --------------------------------------
 show_labels = ->
