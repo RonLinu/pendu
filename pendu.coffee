@@ -103,11 +103,11 @@ guess = (letter) ->
         key.disabled = true for key in game.keyboardKeys
         game.gameKey.textContent = 'NOUVEAU MOT'
         
-        showDialog "Vous avez perdu!<br>Le mot caché était: #{game.hiddenWord}"
+        showDialog "Vous avez perdu!<br><br>Le mot caché était: #{game.hiddenWord}"
     else if game.revealedWord is game.hiddenWord
         key.disabled = true for key in game.keyboardKeys
         game.gameKey.textContent = 'NOUVEAU MOT'
-        showDialog "Bravo!<br>Vous avez gagné."
+        showDialog "Bravo!<br><br>Vous avez gagné."
 
 # --------------------------------------
 reveal_word = ->
@@ -163,11 +163,14 @@ showDialog = (message) ->
       <button id="okBtn">OK</button>
     </center>
   """
-
+  
   document.body.appendChild(dialog)
   dialog.showModal()
 
   okBtn = dialog.querySelector('#okBtn')
+  okBtn.style.fontSize = '16px'
+  okBtn.style.padding = '5px 20px'
+
   okBtn.onclick = ->
     dialog.close()
     dialog.remove()
@@ -185,6 +188,9 @@ showConfirmDialog = (message) ->
 
   # OK button
   okBtn = dialog.querySelector('#okBtn')
+  okBtn.style.padding = '5px 20px'
+  okBtn.style.fontSize = '16px'
+
   okBtn.onclick = ->
     dialog.returnValue = 'ok'
     dialog.close()
@@ -192,6 +198,8 @@ showConfirmDialog = (message) ->
 
   # Cancel button
   cancelBtn = dialog.querySelector('#cancelBtn')
+  cancelBtn.style.padding = '5px 20px'
+  cancelBtn.style.fontSize = '16px'
   cancelBtn.onclick = ->
     dialog.close()
     dialog.remove()

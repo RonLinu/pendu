@@ -116,7 +116,7 @@ guess = function(letter) {
       key.disabled = true;
     }
     game.gameKey.textContent = 'NOUVEAU MOT';
-    return showDialog(`Vous avez perdu!<br>Le mot caché était: ${game.hiddenWord}`);
+    return showDialog(`Vous avez perdu!<br><br>Le mot caché était: ${game.hiddenWord}`);
   } else if (game.revealedWord === game.hiddenWord) {
     ref1 = game.keyboardKeys;
     for (j = 0, len1 = ref1.length; j < len1; j++) {
@@ -124,7 +124,7 @@ guess = function(letter) {
       key.disabled = true;
     }
     game.gameKey.textContent = 'NOUVEAU MOT';
-    return showDialog("Bravo!<br>Vous avez gagné.");
+    return showDialog("Bravo!<br><br>Vous avez gagné.");
   }
 };
 
@@ -199,6 +199,8 @@ showDialog = function(message) {
   document.body.appendChild(dialog);
   dialog.showModal();
   okBtn = dialog.querySelector('#okBtn');
+  okBtn.style.fontSize = '16px';
+  okBtn.style.padding = '5px 20px';
   return okBtn.onclick = function() {
     dialog.close();
     return dialog.remove();
@@ -217,6 +219,8 @@ showConfirmDialog = function(message) {
 </center>`;
   // OK button
   okBtn = dialog.querySelector('#okBtn');
+  okBtn.style.padding = '5px 20px';
+  okBtn.style.fontSize = '16px';
   okBtn.onclick = function() {
     dialog.returnValue = 'ok';
     dialog.close();
@@ -224,6 +228,8 @@ showConfirmDialog = function(message) {
   };
   // Cancel button
   cancelBtn = dialog.querySelector('#cancelBtn');
+  cancelBtn.style.padding = '5px 20px';
+  cancelBtn.style.fontSize = '16px';
   cancelBtn.onclick = function() {
     dialog.close();
     return dialog.remove();
