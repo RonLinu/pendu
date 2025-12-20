@@ -1,4 +1,4 @@
-    
+
 game =
     revealedWord : ''
     hiddenWord   : ''
@@ -7,7 +7,7 @@ game =
 
     keyboardKeys : []
     gameKey      : null
-    
+
 # --------------------------------------
 createKeyboard = ->
     footer = document.getElementById('footer')
@@ -52,7 +52,7 @@ createKeyboard = ->
 
         return btn
     # ----------------------------------
-    
+
     # Generate virtual keyboard
     for row in rows
         rowDiv = document.createElement('div')
@@ -102,16 +102,16 @@ guess = (letter) ->
         updateLabels()
         key.disabled = true for key in game.keyboardKeys
         game.gameKey.textContent = 'NOUVEAU MOT'
-        
-        showDialog "Vous avez perdu!<br><br>Le mot caché était: #{game.hiddenWord}"
+
+        showDialog "<center>Vous avez perdu!</center><br>Le mot caché était: #{game.hiddenWord}"
     else if game.revealedWord is game.hiddenWord
         key.disabled = true for key in game.keyboardKeys
         game.gameKey.textContent = 'NOUVEAU MOT'
-        showDialog "Bravo!<br><br>Vous avez gagné."
+        showDialog "<center>Bravo!</center><br>Vous avez gagné."
 
 # --------------------------------------
 reveal_word = ->
-  msg = 'Révéler le mot caché terminera cette partie.<br><br>Êtes-vous certain?'
+  msg = 'Révéler le mot caché terminera cette partie.<br><center>Êtes-vous certain?</center>'
   showConfirmDialog(msg).then (confirmed) ->
     if confirmed
         # disable all virtual alphabetical keys
@@ -144,7 +144,7 @@ generate_new_word = ->
     updateLabels()
     game.gameKey.textContent = 'RÉVÉLER MOT'
 
-    showDialog "Partie no. #{game.gamesCounter}<br><br>" + 
+    showDialog "<center>Partie no. #{game.gamesCounter}</center><br>" +
         "Mot caché de #{game.hiddenWord.length} lettres"
 # --------------------------------------
 play = ->
@@ -154,7 +154,7 @@ play = ->
         when 'RÉVÉLER MOT'
             reveal_word()
 
-# --------------------------------------
+# -----------------------------------------------------------------------------
 showDialog = (message) ->
   dialog = document.createElement('dialog')
   dialog.innerHTML = """
@@ -163,32 +163,32 @@ showDialog = (message) ->
       <button id="okBtn">OK</button>
     </center>
   """
-  
+
   document.body.appendChild(dialog)
   dialog.showModal()
 
   okBtn = dialog.querySelector('#okBtn')
   okBtn.style.fontSize = '16px'
-  okBtn.style.padding = '5px 20px'
+  okBtn.style.padding = '2px 15px'
 
   okBtn.onclick = ->
     dialog.close()
     dialog.remove()
-  
+
 # --------------------------------------
 showConfirmDialog = (message) ->
   dialog = document.createElement('dialog')
   dialog.innerHTML = """
     <p>#{message}</p>
     <center>
-      <button id="okBtn">Oui</button>
+      <button id="okBtn">Oui</button>&ensp;&ensp;
       <button id="cancelBtn">Non</button>
     </center>
   """
 
   # OK button
   okBtn = dialog.querySelector('#okBtn')
-  okBtn.style.padding = '5px 20px'
+  okBtn.style.padding = '2px 15px'
   okBtn.style.fontSize = '16px'
 
   okBtn.onclick = ->
@@ -198,7 +198,7 @@ showConfirmDialog = (message) ->
 
   # Cancel button
   cancelBtn = dialog.querySelector('#cancelBtn')
-  cancelBtn.style.padding = '5px 20px'
+  cancelBtn.style.padding = '2px 15px'
   cancelBtn.style.fontSize = '16px'
   cancelBtn.onclick = ->
     dialog.close()
@@ -216,3 +216,7 @@ showConfirmDialog = (message) ->
 # **************************************
 do ->
     createKeyboard()
+
+    scores = document.getElementById('scores')
+    prefix = '<li><kbd style="font-size: 16px;">&nbsp;</kbd></li>'
+    scores.innerHTML = prefix + prefix + prefix
