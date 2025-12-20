@@ -103,11 +103,11 @@ guess = (letter) ->
         key.disabled = true for key in game.keyboardKeys
         game.gameKey.textContent = 'NOUVEAU MOT'
 
-        showDialog "<center>Vous avez perdu!</center><br>Le mot caché était: #{game.hiddenWord}"
+        showDialog "<center>Vous avez perdu!</center><br><center>Le mot caché était: #{game.hiddenWord}</center>"
     else if game.revealedWord is game.hiddenWord
         key.disabled = true for key in game.keyboardKeys
         game.gameKey.textContent = 'NOUVEAU MOT'
-        showDialog "<center>Bravo!</center><br>Vous avez gagné."
+        showDialog "<center>Bravo!<center><br><center>Vous avez gagné.</center>"
 
 # --------------------------------------
 reveal_word = ->
@@ -144,8 +144,9 @@ generate_new_word = ->
     updateLabels()
     game.gameKey.textContent = 'RÉVÉLER MOT'
 
-    showDialog "<center>Partie no. #{game.gamesCounter}</center><br>" +
-        "Mot caché de #{game.hiddenWord.length} lettres"
+    showDialog "<center>Partie no. #{game.gamesCounter}<center><br>" +
+        "<center>Mot caché de #{game.hiddenWord.length} lettres</center>"
+        
 # --------------------------------------
 play = ->
     switch game.gameKey.textContent
@@ -157,6 +158,11 @@ play = ->
 # -----------------------------------------------------------------------------
 showDialog = (message) ->
   dialog = document.createElement('dialog')
+
+  dialog.style.fontWeight = '400'
+  dialog.style.fontFamily = 'Arial, sans-serif'
+  if window.innerWidth > 400 then dialog.style.maxWidth = '400px'
+
   dialog.innerHTML = """
     <p>#{message}</p>
     <center>
@@ -178,6 +184,7 @@ showDialog = (message) ->
 # --------------------------------------
 showConfirmDialog = (message) ->
   dialog = document.createElement('dialog')
+  
   dialog.innerHTML = """
     <p>#{message}</p>
     <center>

@@ -116,7 +116,7 @@ guess = function(letter) {
       key.disabled = true;
     }
     game.gameKey.textContent = 'NOUVEAU MOT';
-    return showDialog(`<center>Vous avez perdu!</center><br>Le mot caché était: ${game.hiddenWord}`);
+    return showDialog(`<center>Vous avez perdu!</center><br><center>Le mot caché était: ${game.hiddenWord}</center>`);
   } else if (game.revealedWord === game.hiddenWord) {
     ref1 = game.keyboardKeys;
     for (j = 0, len1 = ref1.length; j < len1; j++) {
@@ -124,7 +124,7 @@ guess = function(letter) {
       key.disabled = true;
     }
     game.gameKey.textContent = 'NOUVEAU MOT';
-    return showDialog("<center>Bravo!</center><br>Vous avez gagné.");
+    return showDialog("<center>Bravo!<center><br><center>Vous avez gagné.</center>");
   }
 };
 
@@ -174,8 +174,9 @@ generate_new_word = function() {
   document.getElementById('gallows').src = 'resources/pendu_0.png';
   updateLabels();
   game.gameKey.textContent = 'RÉVÉLER MOT';
-  return showDialog(`<center>Partie no. ${game.gamesCounter}</center><br>` + `Mot caché de ${game.hiddenWord.length} lettres`);
+  return showDialog(`<center>Partie no. ${game.gamesCounter}<center><br>` + `<center>Mot caché de ${game.hiddenWord.length} lettres</center>`);
 };
+
 
 // --------------------------------------
 play = function() {
@@ -192,6 +193,11 @@ play = function() {
 showDialog = function(message) {
   var dialog, okBtn;
   dialog = document.createElement('dialog');
+  dialog.style.fontWeight = '400';
+  dialog.style.fontFamily = 'Arial, sans-serif';
+  if (window.innerWidth > 400) {
+    dialog.style.maxWidth = '400px';
+  }
   dialog.innerHTML = `<p>${message}</p>
 <center>
   <button id="okBtn">OK</button>
