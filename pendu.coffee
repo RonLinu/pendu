@@ -71,7 +71,7 @@ updateLabels = ->
 
     labels  = "#{prefix}Partie no: #{game.gamesCounter}</kbd>"
     labels += "#{prefix}Mot caché: #{game.revealedWord}</kbd>"
-    labels += "#{prefix}#{s}#{s}#{s}Échecs: #{game.failsCounter}</kbd>"
+    labels += "#{prefix}#{s}#{s}Manqués: #{game.failsCounter}</kbd>"
 
     scores.innerHTML = labels
 
@@ -111,7 +111,7 @@ guess = (letter) ->
 
 # --------------------------------------
 reveal_word = ->
-  msg = 'Révéler le mot caché terminera cette partie.<br><center>Êtes-vous certain?</center>'
+  msg = 'Révéler le mot caché terminera cette partie.<br><br><center>Êtes-vous certain?</center>'
   showConfirmDialog(msg).then (confirmed) ->
     if confirmed
         # disable all virtual alphabetical keys
@@ -155,71 +155,6 @@ play = ->
         when 'RÉVÉLER MOT'
             reveal_word()
 
-# -----------------------------------------------------------------------------
-showDialog = (message) ->
-  dialog = document.createElement('dialog')
-
-  dialog.style.fontWeight = '400'
-  dialog.style.fontFamily = 'Arial, sans-serif'
-  if window.innerWidth > 400 then dialog.style.maxWidth = '400px'
-
-  dialog.innerHTML = """
-    <p>#{message}</p>
-    <center>
-      <button id="okBtn">OK</button>
-    </center>
-  """
-
-  document.body.appendChild(dialog)
-  dialog.showModal()
-
-  okBtn = dialog.querySelector('#okBtn')
-  okBtn.style.fontSize = '16px'
-  okBtn.style.padding = '2px 15px'
-
-  okBtn.onclick = ->
-    dialog.close()
-    dialog.remove()
-
-# --------------------------------------
-showConfirmDialog = (message) ->
-  dialog = document.createElement('dialog')
-  
-  dialog.innerHTML = """
-    <p>#{message}</p>
-    <center>
-      <button id="okBtn">Oui</button>&ensp;&ensp;
-      <button id="cancelBtn">Non</button>
-    </center>
-  """
-
-  # OK button
-  okBtn = dialog.querySelector('#okBtn')
-  okBtn.style.padding = '2px 15px'
-  okBtn.style.fontSize = '16px'
-
-  okBtn.onclick = ->
-    dialog.returnValue = 'ok'
-    dialog.close()
-    dialog.remove()
-
-  # Cancel button
-  cancelBtn = dialog.querySelector('#cancelBtn')
-  cancelBtn.style.padding = '2px 15px'
-  cancelBtn.style.fontSize = '16px'
-  cancelBtn.onclick = ->
-    dialog.close()
-    dialog.remove()
-
-  document.body.appendChild(dialog)
-  dialog.showModal()
-
-  # Return Promise for async result
-  new Promise (resolve) ->
-    dialog.onclose = ->
-      result = dialog.returnValue
-      resolve(result == 'ok')
-
 # **************************************
 do ->
     createKeyboard()
@@ -227,3 +162,4 @@ do ->
     scores = document.getElementById('scores')
     prefix = '<li><kbd style="font-size: 16px;">&nbsp;</kbd></li>'
     scores.innerHTML = prefix + prefix + prefix
+
