@@ -5,13 +5,13 @@ import 'dart:math'; // for Random()
 import 'dialogs.dart';
 import 'words.dart'; // loads ~17400 french words list
 
-String RevealedWord = '';
-String HiddenWord = '';
-int GamesCounter = 0;
-int FailsCounter = 0;
+var RevealedWord = '';
+var HiddenWord = '';
+var GamesCounter = 0;
+var FailsCounter = 0;
 
 List<HTMLButtonElement> KeyboardKeys = [];
-late final HTMLButtonElement GameKey;
+late HTMLButtonElement GameKey;
 
 // -------------------------------------
 void main() {
@@ -32,8 +32,8 @@ void play() {
 
 // -------------------------------------
 void createKeyboard() {
-  final footer = document.getElementById('footer');
-  final keyboard = document.createElement('div') as HTMLElement;
+  var footer = document.getElementById('footer');
+  var keyboard = document.createElement('div') as HTMLElement;
 
   keyboard.style.marginTop = '10px';
   footer!.appendChild(keyboard);
@@ -48,8 +48,9 @@ void createKeyboard() {
 
   // ----- Local function to create one virtual keyboard button
   createButton(buttonName) {
-    final btn = document.createElement('button') as HTMLButtonElement;
+    var btn = document.createElement('button') as HTMLButtonElement;
 
+    // Button listener
     btn.onClick.listen((_) {
       switch (buttonName) {
         case 'COMMENCER':
@@ -79,12 +80,12 @@ void createKeyboard() {
   }
 
   // Generate virtual keyboard
-  for (final row in rows) {
-    final rowDiv = document.createElement('div') as HTMLElement;
+  for (var row in rows) {
+    var rowDiv = document.createElement('div') as HTMLElement;
     rowDiv.style.marginBottom = '5px';
 
-    for (final buttonName in row) {
-      final onebutton = createButton(buttonName);
+    for (var buttonName in row) {
+      var onebutton = createButton(buttonName);
       rowDiv.appendChild(onebutton);
     }
     keyboard.appendChild(rowDiv);
@@ -107,9 +108,9 @@ void generateNewWord() {
   FailsCounter = 0;
 
   // Enable all virtual alphabetic keys
-  for (final key in KeyboardKeys) key.disabled = false;
+  for (var key in KeyboardKeys) key.disabled = false;
 
-  final image = document.getElementById('potence') as HTMLImageElement;
+  var image = document.getElementById('potence') as HTMLImageElement;
   image.src = 'resources/pendu_0.png';
 
   updateLabels();
@@ -122,13 +123,13 @@ void generateNewWord() {
 // -------------------------------------
 void updateLabels() {
   const s = '&nbsp;';
-  final prefix = '<li><kbd style="font-size: 16px;">' + "${s}${s}${s}${s}";
+  var prefix = '<li><kbd style="font-size: 16px;">' + "${s}${s}${s}${s}";
 
   var labels = "${prefix}Partie no: ${GamesCounter}</kbd>";
   labels += "${prefix}Mot caché: ${RevealedWord}</kbd>";
   labels += "${prefix}${s}${s}Manqués: ${FailsCounter}</kbd>";
 
-  final scores = document.getElementById('scores') as HTMLElement;
+  var scores = document.getElementById('scores') as HTMLElement;
   scores.innerHTML = labels.toJS;
 }
 
@@ -139,20 +140,20 @@ String normalize(String letter) {
 
   letter = letter.toLowerCase();
 
-  final index = withDiacritics.indexOf(letter);
+  var index = withDiacritics.indexOf(letter);
 
-  if (index > -1) letter = withoutDiacritics[index];
+  if (index != -1) letter = withoutDiacritics[index];
 
   return letter;
 }
 
 // -------------------------------------
 void reveal(String letter) {
-  final normalizedLetter = normalize(letter);
-  final revealed = RevealedWord.split('');
+  var normalizedLetter = normalize(letter);
+  var revealed = RevealedWord.split('');
 
   for (int i = 0; i < HiddenWord.length; i++) {
-    final ch = HiddenWord[i];
+    var ch = HiddenWord[i];
     if (normalize(ch) == normalizedLetter) revealed[i] = HiddenWord[i];
   }
 
@@ -161,14 +162,14 @@ void reveal(String letter) {
 
 // -------------------------------------
 void revealWord() async {
-  final msg =
+  var msg =
       'Révéler le mot caché terminera cette partie.<br><br><center>Êtes-vous certain?</center>';
 
-  final answer = await showDialog(msg, ok: 'Oui', cancel: 'Non');
+  var answer = await showDialog(msg, ok: 'Oui', cancel: 'Non');
 
   if (answer == 'ok') {
     // Disable all virtual alphabetic keys
-    for (final btn in KeyboardKeys) btn.disabled = true;
+    for (var btn in KeyboardKeys) btn.disabled = true;
     RevealedWord = HiddenWord;
     GameKey.textContent = 'NOUVEAU MOT';
     updateLabels();
@@ -177,26 +178,26 @@ void revealWord() async {
 
 // -------------------------------------
 void guess(letter) {
-  final beforeReveal = RevealedWord;
+  var beforeReveal = RevealedWord;
   reveal(letter);
   updateLabels();
 
   if (RevealedWord == beforeReveal) {
     FailsCounter++;
     updateLabels();
-    final image = document.getElementById('potence') as HTMLImageElement;
+    var image = document.getElementById('potence') as HTMLImageElement;
     image.src = "resources/pendu_${FailsCounter}.png";
   }
 
   if (FailsCounter == 10) {
     RevealedWord = HiddenWord;
     updateLabels();
-    for (final btn in KeyboardKeys) btn.disabled = true;
+    for (var btn in KeyboardKeys) btn.disabled = true;
     GameKey.textContent = 'NOUVEAU MOT';
     showDialog(
         "<center>Vous avez perdu!</center><br><center>Le mot caché était: <b>${HiddenWord}</b></center>");
   } else if (RevealedWord == HiddenWord) {
-    for (final btn in KeyboardKeys) btn.disabled = true;
+    for (var btn in KeyboardKeys) btn.disabled = true;
     GameKey.textContent = 'NOUVEAU MOT';
     showDialog("<center>Bravo!<center><br><center>Vous avez gagné.</center>");
   }
