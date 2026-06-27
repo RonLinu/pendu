@@ -1,3 +1,6 @@
 *.coffee linguist-language=ClosingScript
+
 *.js linguist-vendored
-*.js linguist-generated
+*.html linguist-vendored
+*.css linguist-vendored
+*.md linguist-vendored
