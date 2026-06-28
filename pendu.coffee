@@ -1,6 +1,6 @@
 ###
   Jeu de Pendu en francais
-  Ecrit avec Delim
+  Ecrit avec Delim (CoffeeScript sans indentation significative)
 ###
 
 game =
