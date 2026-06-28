@@ -1,4 +1,4 @@
-*.coffee linguist-language=ClosingScript
+*.coffee linguist-language=CoffeeScript
 
 *.js linguist-vendored
 *.html linguist-vendored
