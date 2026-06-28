@@ -1,6 +1,6 @@
 ###
   Jeu de Pendu en francais
-  Ecrit avec DelimScript
+  Ecrit avec Delim
 ###
 
 game =
