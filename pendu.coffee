@@ -54,7 +54,7 @@ createKeyboard = ->
       btn.disabled = true
     else if buttonName is 'COMMENCER':
       game.gameKey = btn         # record game key reference
-    end if
+    end
 
     return btn
   end
@@ -66,7 +66,7 @@ createKeyboard = ->
 
     for buttonName in row then rowDiv.appendChild createButton(buttonName)
     keyboard.appendChild rowDiv
-  end for
+  end
 end
 
 # --------------------------------------
@@ -89,7 +89,7 @@ reveal = (letter) ->
 
   for ch, index in game.hiddenWord when collator.compare(ch, letter) is 0 :
     revealed[index] = game.hiddenWord[index]
-  end for
+  end
 
   game.revealedWord = revealed.join('')
 end
@@ -105,7 +105,7 @@ guess = (letter) ->
     updateLabels()
     image_file = "resources/pendu_#{game.failCounter}.png"
     document.getElementById('gallows').src = image_file
-  end if
+  end
 
   if game.failCounter == 10:
     game.revealedWord = game.hiddenWord
@@ -117,7 +117,7 @@ guess = (letter) ->
     key.disabled = true for key in game.keyboardKeys
     game.gameKey.textContent = 'NOUVEAU MOT'
     showDialog "<center>Bravo!<center><br><center>Vous avez gagné.</center>"
-  end if
+  end
 end
 
 # --------------------------------------
@@ -132,7 +132,7 @@ reveal_word = ->
     game.revealedWord = game.hiddenWord
     game.gameKey.textContent = 'NOUVEAU MOT'
     updateLabels()
-  end if
+  end
 end
 
 # --------------------------------------
