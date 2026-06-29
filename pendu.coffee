@@ -1,6 +1,6 @@
 ###
   Jeu de Pendu en francais
-  Ecrit avec DelimCoffee
+  Ecrit avec CoffeeDelim
 ###
 
 game =
