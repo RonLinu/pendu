@@ -64,7 +64,7 @@ createKeyboard = ->
     rowDiv = document.createElement('div')
     rowDiv.style.marginBottom = '5px'
 
-    ;for buttonName in row then rowDiv.appendChild createButton(buttonName)
+    for buttonName in row then rowDiv.appendChild createButton(buttonName) ;
     keyboard.appendChild rowDiv
   end
 end
