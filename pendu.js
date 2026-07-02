@@ -1,5 +1,6 @@
 /*
 Jeu de Pendu en francais
+Écrit avec CoffeeDelim (CoffeeScript sans indentation)
 */
 var createKeyboard, game, generate_new_word, guess, play, reveal, reveal_word, updateLabels;
 
@@ -12,7 +13,7 @@ game = {
   gameKey: null
 };
 
-// -------------------------------------- 
+// --------------------------------------
 createKeyboard = function() {
   var buttonName, createButton, footer, i, j, keyboard, len, len1, results, row, rowDiv, rows;
   footer = document.getElementById('footer');
@@ -20,10 +21,10 @@ createKeyboard = function() {
   keyboard.style.margin = '10px';
   footer.appendChild(keyboard);
   
-  // Define rows of alphabetic keys 
+  // Define rows of alphabetic keys
   rows = [['A', 'B', 'C', 'D', 'E', 'F', 'G'], ['H', 'I', 'J', 'K', 'L', 'M', 'N'], ['O', 'P', 'Q', 'R', 'S', 'T', 'U'], ['V', 'W', 'X', 'Y', 'Z'], ['COMMENCER', 'AU SUJET']];
   
-  // ----- Local function to create one virtual keyboard button 
+  // ----- Local function to create one virtual keyboard button
   Object(createButton = function(buttonName) {
     var btn;
     btn = document.createElement('button');
@@ -54,7 +55,7 @@ createKeyboard = function() {
     return btn;
   });
 
-  // Generate virtual keyboard 
+  // Generate virtual keyboard
   results = [];
   for (i = 0, len = rows.length; i < len; i++) {
     row = rows[i];
@@ -70,7 +71,7 @@ createKeyboard = function() {
 };
 
 
-// -------------------------------------- 
+// --------------------------------------
 updateLabels = function() {
   var labels, prefix, scores, sp;
   scores = document.getElementById('scores');
@@ -82,7 +83,7 @@ updateLabels = function() {
   return scores.innerHTML = labels;
 };
 
-// ------------------------------------- 
+// -------------------------------------
 reveal = function(letter) {
   var ch, collator, i, index, len, ref, revealed;
   collator = new Intl.Collator('fr', {
@@ -99,7 +100,7 @@ reveal = function(letter) {
   return game.revealedWord = revealed.join('');
 };
 
-// -------------------------------------- 
+// --------------------------------------
 guess = function(letter) {
   var beforeReveal, i, image_file, j, key, len, len1, ref, ref1;
   beforeReveal = game.revealedWord;
@@ -133,7 +134,7 @@ guess = function(letter) {
 };
 
 
-// -------------------------------------- 
+// --------------------------------------
 reveal_word = async function() {
   var answer, i, key, len, msg, ref;
   msg = 'Révéler le mot caché terminera cette partie.<br><br><center>Êtes-vous certain?</center>';
@@ -142,7 +143,7 @@ reveal_word = async function() {
     rightLabel: 'Non'
   }));
   
-  // disable all virtual alphabetical keys if revealed 
+  // disable all virtual alphabetical keys if revealed
   if (answer === 'Oui') {
     ref = game.keyboardKeys;
     for (i = 0, len = ref.length; i < len; i++) {
@@ -156,11 +157,11 @@ reveal_word = async function() {
 };
 
 
-// -------------------------------------- 
+// --------------------------------------
 generate_new_word = function() {
   var i, key, len, ref;
   while (true) {
-    // pick random word from WORDS[] array defined in pendu_mots.js 
+    // pick random word from WORDS[] array defined in pendu_mots.js
     game.hiddenWord = window.WORDS[Math.floor(Math.random() * window.WORDS.length)].toLowerCase();
     if (game.hiddenWord.length <= 20) {
       break;
@@ -176,7 +177,7 @@ generate_new_word = function() {
   for (i = 0, len = ref.length; i < len; i++) {
     key = ref[i];
     
-    // enable all virtual alphabetic keys 
+    // enable all virtual alphabetic keys
     key.disabled = false;
   }
   document.getElementById('gallows').src = 'resources/pendu_0.png';
@@ -185,7 +186,7 @@ generate_new_word = function() {
   return showDialog(`<center>Partie no. ${game.gameCounter}<center><br>` + `<center>Mot caché de ${game.hiddenWord.length} lettres</center>`);
 };
 
-// -------------------------------------- 
+// --------------------------------------
 play = function() {
   switch (game.gameKey.textContent) {
     case 'COMMENCER':
@@ -197,7 +198,7 @@ play = function() {
 };
 
 (function() {  
-  // ************************************** 
+  // **************************************
   var prefix, scores;
   createKeyboard();
   scores = document.getElementById('scores');
