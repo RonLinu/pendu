@@ -1,4 +1,4 @@
-# Written with CoffeeDelim
+# Written with CoffeeDelimited
 
 window.showDialog = (message, extras = {} ) ->
   {label='Ok', width='400'} = extras
