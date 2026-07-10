@@ -1,6 +1,6 @@
 ###
   Jeu de Pendu en francais
-  Écrit avec CoffeeDelim (CoffeeScript sans indentation)
+  Écrit avec CoffeeDelimited (CoffeeScript sans indentation)
 ###
 
 game =
@@ -49,24 +49,27 @@ createKeyboard = ->
     btn.style.padding = '5px 14px'
     btn.style.fontSize = '16px'
 
-    if buttonName.length == 1
+    if buttonName.length == 1 then
       game.keyboardKeys.push btn   # record alpha key reference
       btn.disabled = true
     else if buttonName is 'COMMENCER'
       game.gameKey = btn         # record game key reference
-    end
+    end if
 
     return btn
   end
 
   # Generate virtual keyboard
-  for row in rows
+  for row in rows then
     rowDiv = document.createElement('div')
     rowDiv.style.marginBottom = '5px'
 
-    for buttonName in row then rowDiv.appendChild createButton(buttonName) ;
+    for buttonName in row then
+      rowDiv.appendChild createButton(buttonName)
+    end for
     keyboard.appendChild rowDiv
-  end
+  end for
+
 end
 
 # --------------------------------------
@@ -87,9 +90,9 @@ reveal = (letter) ->
   collator = new Intl.Collator('fr', {sensitivity: 'base'})
   revealed = game.revealedWord.split('')
 
-  for ch, index in game.hiddenWord when collator.compare(ch, letter) is 0
+  for ch, index in game.hiddenWord when collator.compare(ch, letter) is 0 then
     revealed[index] = game.hiddenWord[index]
-  end
+  end for
 
   game.revealedWord = revealed.join('')
 end
@@ -100,24 +103,26 @@ guess = (letter) ->
   reveal letter
   updateLabels()
 
-  if game.revealedWord is beforeReveal
+  if game.revealedWord is beforeReveal then
     game.failCounter++
     updateLabels()
     image_file = "resources/pendu_#{game.failCounter}.png"
     document.getElementById('gallows').src = image_file
-  end
+  end if
 
-  if game.failCounter == 10
+  if game.failCounter == 10 then
     game.revealedWord = game.hiddenWord
     updateLabels()
     key.disabled = true for key in game.keyboardKeys
     game.gameKey.textContent = 'NOUVEAU MOT'
     showDialog "<center>Vous avez perdu!</center><br><center>Le mot caché était: #{game.hiddenWord}</center>"
+
   else if game.revealedWord is game.hiddenWord
     key.disabled = true for key in game.keyboardKeys
     game.gameKey.textContent = 'NOUVEAU MOT'
     showDialog "<center>Bravo!<center><br><center>Vous avez gagné.</center>"
-  end
+  end if
+
 end
 
 # --------------------------------------
@@ -127,12 +132,13 @@ reveal_word = ->
   answer = await showConfirmDialog(msg, leftLabel:'Oui', rightLabel:'Non')
 
   # disable all virtual alphabetical keys if revealed
-  if answer is 'Oui'
+  if answer is 'Oui' then
     key.disabled = true for key in game.keyboardKeys
     game.revealedWord = game.hiddenWord
     game.gameKey.textContent = 'NOUVEAU MOT'
     updateLabels()
-  end
+  end if
+
 end
 
 # --------------------------------------
@@ -141,7 +147,7 @@ generate_new_word = ->
     # pick random word from WORDS[] array defined in pendu_mots.js
     game.hiddenWord = window.WORDS[Math.floor(Math.random() * window.WORDS.length)].toLowerCase()
     break if game.hiddenWord.length <= 20
-  end
+  end loop
 
   game.revealedWord = '*'.repeat(game.hiddenWord.length)
 
@@ -169,6 +175,7 @@ play = ->
     when 'COMMENCER', 'NOUVEAU MOT' then generate_new_word()
     when 'RÉVÉLER MOT' then reveal_word()
   end switch
+
 end
 
 # **************************************
@@ -178,5 +185,4 @@ do ->
   scores = document.getElementById('scores')
   prefix = '<li><kbd style="font-size: 16px;">&nbsp;</kbd></li>'
   scores.innerHTML = prefix + prefix + prefix
-  
 end
