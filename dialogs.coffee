@@ -14,8 +14,8 @@ window.showDialog = (message, extras = {} ) ->
   dialog.style.border = '1px solid #000'      #'1px solid #ccc'
   dialog.style.boxShadow = '0 4px 16px rgba(0,0,0,.2)'
   
-  dialog.innerHTML = """
-    #{message}
+  dialog.innerHTML = 
+  """ #{message}
     <br>
     <center>
     <button id="okBtn">#{label}</button>
@@ -48,8 +48,8 @@ window.showConfirmDialog = (message, extras = {} ) ->
   dialog.style.border = '1px solid #000'      #'1px solid #ccc'
   dialog.style.boxShadow = '0 4px 16px rgba(0,0,0,.2)'
   
-  dialog.innerHTML = """
-    #{message}
+  dialog.innerHTML =
+  """ #{message}
     <br>
     <center>
     <button id="okBtn">#{leftLabel}</button>&ensp;&ensp;
