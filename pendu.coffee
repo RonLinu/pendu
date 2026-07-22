@@ -1,13 +1,12 @@
 ###
-  Jeu de Pendu en francais
-  Written with CoffeeDelim (indentation-free variant of CoffeeScript)
+  French version of Hangman
 ###
 
 game =
   revealedWord : ''
   hiddenWord   : ''
-  gameCounter  : ''      # empty string, does not show as zero
-  failCounter  : ''      # same
+  gameCounter : 0
+  failCounter : 0
   keyboardKeys : []
   gameKey      : null
 
@@ -27,21 +26,18 @@ createKeyboard = ->
   ]
 
   # ----- Local function to create one virtual keyboard button
-  Object createButton = (buttonName) ->
+  createButton = (buttonName) ->
     btn = document.createElement('button')
 
     btn.onclick = ->
       switch buttonName
-        when 'COMMENCER'
-          play()
-        when 'AU SUJET'
-          aide = document.getElementById("aide").innerHTML
-          showDialog(aide)
+        when 'COMMENCER' then play()
+        when 'AU SUJET' then auSujet()
         else
           btn.disabled = true
           guess buttonName
-      end switch
-    end
+      \switch
+    \Function
 
     btn.textContent = buttonName
     btn.style.cursor = 'pointer'
@@ -52,25 +48,38 @@ createKeyboard = ->
     if buttonName.length == 1
       game.keyboardKeys.push btn   # record alpha key reference
       btn.disabled = true
-    else if buttonName is 'COMMENCER'
+    else if buttonName == 'COMMENCER'
       game.gameKey = btn         # record game key reference
-    end if
+    \if
 
     return btn
-  end
+  \Function
 
   # Generate virtual keyboard
   for row in rows
     rowDiv = document.createElement('div')
     rowDiv.style.marginBottom = '5px'
 
-    for buttonName in row
-      rowDiv.appendChild createButton(buttonName)
-    end for
+    rowDiv.appendChild createButton(buttonName) for buttonName in row
     keyboard.appendChild rowDiv
-  end for
+  \for
+\Function
 
-end
+# --------------------------------------
+auSujet = ->
+  aide =
+  '''<center><b>Pendu © 2025 - RonLinu</b></center><br>
+    Ce jeu bien connu consiste à deviner, une lettre à la fois,
+    un mot caché qui est choisi au hazard parmi plus de
+    17000 mots français.<br><br>
+    Si vous accumulez 10 échecs sans avoir trouvé un mot caché,
+    vous perdez 😞<br><br>
+    Cliquer sur une lettre dévoile aussi toutes les lettres
+    accentuées correspondantes.<br>
+  '''
+
+  showDialog(aide)
+\Function
 
 # --------------------------------------
 updateLabels = ->
@@ -83,7 +92,7 @@ updateLabels = ->
   labels += "#{prefix}#{sp}#{sp}Manqués: #{game.failCounter}</kbd>"
 
   scores.innerHTML = labels
-end
+\Function
 
 # -------------------------------------
 reveal = (letter) ->
@@ -92,10 +101,10 @@ reveal = (letter) ->
 
   for ch, index in game.hiddenWord when collator.compare(ch, letter) is 0
     revealed[index] = game.hiddenWord[index]
-  end for
+  \for
 
   game.revealedWord = revealed.join('')
-end
+\Function
 
 # --------------------------------------
 guess = (letter) ->
@@ -108,22 +117,21 @@ guess = (letter) ->
     updateLabels()
     image_file = "resources/pendu_#{game.failCounter}.png"
     document.getElementById('gallows').src = image_file
-  end if
+  \if
 
   if game.failCounter == 10
     game.revealedWord = game.hiddenWord
     updateLabels()
-    key.disabled = true for key in game.keyboardKeys
+    key.disabled = true  for key in game.keyboardKeys
     game.gameKey.textContent = 'NOUVEAU MOT'
     showDialog "<center>Vous avez perdu!</center><br><center>Le mot caché était: #{game.hiddenWord}</center>"
 
   else if game.revealedWord is game.hiddenWord
-    key.disabled = true for key in game.keyboardKeys
+    key.disabled = true  for key in game.keyboardKeys
     game.gameKey.textContent = 'NOUVEAU MOT'
     showDialog "<center>Bravo!<center><br><center>Vous avez gagné.</center>"
-  end if
-
-end
+  \if
+\Function
 
 # --------------------------------------
 reveal_word = ->
@@ -131,15 +139,14 @@ reveal_word = ->
 
   answer = await showConfirmDialog(msg, leftLabel:'Oui', rightLabel:'Non')
 
-  # disable all virtual alphabetical keys if revealed
   if answer is 'Oui'
-    key.disabled = true for key in game.keyboardKeys
+    # disable all virtual alphabetical keys
+    key.disabled = true  for key in game.keyboardKeys
     game.revealedWord = game.hiddenWord
     game.gameKey.textContent = 'NOUVEAU MOT'
     updateLabels()
-  end if
-
-end
+  \if
+\Function
 
 # --------------------------------------
 generate_new_word = ->
@@ -147,7 +154,7 @@ generate_new_word = ->
     # pick random word from WORDS[] array defined in pendu_mots.js
     game.hiddenWord = window.WORDS[Math.floor(Math.random() * window.WORDS.length)].toLowerCase()
     break if game.hiddenWord.length <= 20
-  end loop
+  \loop
 
   game.revealedWord = '*'.repeat(game.hiddenWord.length)
 
@@ -159,7 +166,7 @@ generate_new_word = ->
   game.failCounter = ''
 
   # enable all virtual alphabetic keys
-  key.disabled = false for key in game.keyboardKeys
+  key.disabled = false  for key in game.keyboardKeys
 
   document.getElementById('gallows').src = 'resources/pendu_0.png'
   updateLabels()
@@ -167,22 +174,22 @@ generate_new_word = ->
 
   showDialog "<center>Partie no. #{game.gameCounter}<center><br>" +
   "<center>Mot caché de #{game.hiddenWord.length} lettres</center>"
-end
+\Function
 
 # --------------------------------------
 play = ->
   switch game.gameKey.textContent
-    when 'COMMENCER', 'NOUVEAU MOT' then generate_new_word()
-    when 'RÉVÉLER MOT' then reveal_word()
-  end switch
-
-end
+    when 'COMMENCER', 'NOUVEAU MOT'
+      generate_new_word()
+    when 'RÉVÉLER MOT'
+      reveal_word()
+  \switch
+\Function
 
 # **************************************
 do ->
   createKeyboard()
-
   scores = document.getElementById('scores')
   prefix = '<li><kbd style="font-size: 16px;">&nbsp;</kbd></li>'
   scores.innerHTML = prefix + prefix + prefix
-end
+\Function

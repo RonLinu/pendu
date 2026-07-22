@@ -1,14 +1,13 @@
 /*
-  Jeu de Pendu en francais
-  Écrit avec CoffeeDelimited (CoffeeScript sans indentation)
+French version of Hangman
 */
-var createKeyboard, game, generate_new_word, guess, play, reveal, reveal_word, updateLabels;
+var auSujet, createKeyboard, game, generate_new_word, guess, play, reveal, reveal_word, updateLabels;
 
 game = {
   revealedWord: '',
   hiddenWord: '',
-  gameCounter: '', // empty string, does not show as zero
-  failCounter: '', // same
+  gameCounter: 0,
+  failCounter: 0,
   keyboardKeys: [],
   gameKey: null
 };
@@ -25,40 +24,33 @@ createKeyboard = function() {
   rows = [['A', 'B', 'C', 'D', 'E', 'F', 'G'], ['H', 'I', 'J', 'K', 'L', 'M', 'N'], ['O', 'P', 'Q', 'R', 'S', 'T', 'U'], ['V', 'W', 'X', 'Y', 'Z'], ['COMMENCER', 'AU SUJET']];
   
   // ----- Local function to create one virtual keyboard button
-  Object(createButton = function(buttonName) {
+  createButton = function(buttonName) {
     var btn;
     btn = document.createElement('button');
     btn.onclick = function() {
-      var aide;
       switch (buttonName) {
         case 'COMMENCER':
           return play();
         case 'AU SUJET':
-          aide = document.getElementById("aide").innerHTML;
-          return showDialog(aide);
+          return auSujet();
         default:
           btn.disabled = true;
           return guess(buttonName);
       }
     };
-    //!end switch
-    //!end
     btn.textContent = buttonName;
     btn.style.cursor = 'pointer';
     btn.style.margin = '2px';
     btn.style.padding = '5px 14px';
     btn.style.fontSize = '16px';
-    if (buttonName.length === 1) { //!then
+    if (buttonName.length === 1) {
       game.keyboardKeys.push(btn); // record alpha key reference
       btn.disabled = true;
     } else if (buttonName === 'COMMENCER') {
       game.gameKey = btn; // record game key reference
     }
-    //!end if
     return btn;
-  });
-//!then
-//!end
+  };
 
   // Generate virtual keyboard
   results = [];
@@ -66,20 +58,29 @@ createKeyboard = function() {
     row = rows[i];
     rowDiv = document.createElement('div');
     rowDiv.style.marginBottom = '5px';
-//!then
     for (j = 0, len1 = row.length; j < len1; j++) {
       buttonName = row[j];
       rowDiv.appendChild(createButton(buttonName));
     }
-    //!end for
     results.push(keyboard.appendChild(rowDiv));
   }
   return results;
 };
 
-//!end for
 
-//!end
+// --------------------------------------
+auSujet = function() {
+  var aide;
+  aide = `<center><b>Pendu © 2025 - RonLinu</b></center><br>
+Ce jeu bien connu consiste à deviner, une lettre à la fois,
+un mot caché qui est choisi au hazard parmi plus de
+17000 mots français.<br><br>
+Si vous accumulez 10 échecs sans avoir trouvé un mot caché,
+vous perdez 😞<br><br>
+Cliquer sur une lettre dévoile aussi toutes les lettres
+accentuées correspondantes.<br>`;
+  return showDialog(aide);
+};
 
 // --------------------------------------
 updateLabels = function() {
@@ -93,8 +94,6 @@ updateLabels = function() {
   return scores.innerHTML = labels;
 };
 
-//!end
-
 // -------------------------------------
 reveal = function(letter) {
   var ch, collator, i, index, len, ref, revealed;
@@ -103,18 +102,14 @@ reveal = function(letter) {
   });
   revealed = game.revealedWord.split('');
   ref = game.hiddenWord;
-  //!then
   for (index = i = 0, len = ref.length; i < len; index = ++i) {
     ch = ref[index];
     if (collator.compare(ch, letter) === 0) {
       revealed[index] = game.hiddenWord[index];
     }
   }
-  //!end for
   return game.revealedWord = revealed.join('');
 };
-
-//!end
 
 // --------------------------------------
 guess = function(letter) {
@@ -122,14 +117,13 @@ guess = function(letter) {
   beforeReveal = game.revealedWord;
   reveal(letter);
   updateLabels();
-  if (game.revealedWord === beforeReveal) { //!then
+  if (game.revealedWord === beforeReveal) {
     game.failCounter++;
     updateLabels();
     image_file = `resources/pendu_${game.failCounter}.png`;
     document.getElementById('gallows').src = image_file;
   }
-  //!end if
-  if (game.failCounter === 10) { //!then
+  if (game.failCounter === 10) {
     game.revealedWord = game.hiddenWord;
     updateLabels();
     ref = game.keyboardKeys;
@@ -150,9 +144,6 @@ guess = function(letter) {
   }
 };
 
-//!end if
-
-//!end
 
 // --------------------------------------
 reveal_word = async function() {
@@ -162,12 +153,11 @@ reveal_word = async function() {
     leftLabel: 'Oui',
     rightLabel: 'Non'
   }));
-  
-  // disable all virtual alphabetical keys if revealed
-  if (answer === 'Oui') { //!then
+  if (answer === 'Oui') {
     ref = game.keyboardKeys;
     for (i = 0, len = ref.length; i < len; i++) {
       key = ref[i];
+      // disable all virtual alphabetical keys
       key.disabled = true;
     }
     game.revealedWord = game.hiddenWord;
@@ -176,9 +166,6 @@ reveal_word = async function() {
   }
 };
 
-//!end if
-
-//!end
 
 // --------------------------------------
 generate_new_word = function() {
@@ -190,7 +177,6 @@ generate_new_word = function() {
       break;
     }
   }
-  //!end loop
   game.revealedWord = '*'.repeat(game.hiddenWord.length);
   reveal('(');
   reveal(')');
@@ -210,8 +196,6 @@ generate_new_word = function() {
   return showDialog(`<center>Partie no. ${game.gameCounter}<center><br>` + `<center>Mot caché de ${game.hiddenWord.length} lettres</center>`);
 };
 
-//!end
-
 // --------------------------------------
 play = function() {
   switch (game.gameKey.textContent) {
@@ -223,10 +207,7 @@ play = function() {
   }
 };
 
-(function() {  //!end switch
-
-  //!end
-
+(function() {  
   // **************************************
   var prefix, scores;
   createKeyboard();
@@ -234,5 +215,3 @@ play = function() {
   prefix = '<li><kbd style="font-size: 16px;">&nbsp;</kbd></li>';
   return scores.innerHTML = prefix + prefix + prefix;
 })();
-
-//!end
