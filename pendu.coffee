@@ -1,5 +1,6 @@
 ###
   French version of Hangman
+  To be compiled with Coffee ST
 ###
 
 game =
