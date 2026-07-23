@@ -1,3 +1,4 @@
+# to be compiled with Coffee ST
 
 window.showDialog = (message, extras = {} ) ->
   {label='Ok', width='400'} = extras
