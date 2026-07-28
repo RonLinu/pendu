@@ -140,7 +140,7 @@ guess = function(letter) {
       key.disabled = true;
     }
     game.gameKey.textContent = 'NOUVEAU MOT';
-    return showDialog("<center>Bravo!<center><br><center>Vous avez gagné.</center>");
+    return showDialog("<center>Bravo!<center><br><center>Vous avez trouvé.</center>");
   }
 };
 
