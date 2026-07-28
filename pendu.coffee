@@ -131,7 +131,7 @@ guess = (letter) ->
   else if game.revealedWord is game.hiddenWord
     key.disabled = true  for key in game.keyboardKeys
     game.gameKey.textContent = 'NOUVEAU MOT'
-    showDialog "<center>Bravo!<center><br><center>Vous avez gagné.</center>"
+    showDialog "<center>Bravo!<center><br><center>Vous avez trouvé.</center>"
   \if
 \Function
 
