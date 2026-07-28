@@ -1,15 +1,16 @@
 ###
   French version of Hangman
-  To be compiled with Coffee ST
+  To be compiled with CoffeeST
 ###
 
-game =
+game = {
   revealedWord : ''
   hiddenWord   : ''
   gameCounter : 0
   failCounter : 0
   keyboardKeys : []
   gameKey      : null
+}
 
 # --------------------------------------
 createKeyboard = ->
