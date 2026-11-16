@@ -24,10 +24,10 @@ createKeyboard = function() {
   rows = [['A', 'B', 'C', 'D', 'E', 'F', 'G'], ['H', 'I', 'J', 'K', 'L', 'M', 'N'], ['O', 'P', 'Q', 'R', 'S', 'T', 'U'], ['V', 'W', 'X', 'Y', 'Z'], ['COMMENCER', 'AU SUJET']];
   
   // ----- Local function to create one virtual keyboard button
-  createButton = function(buttonName) {
+  Object(createButton = function(buttonName) {
     var btn;
     btn = document.createElement('button');
-    btn.onclick = function() {
+    btn.onclick = function() { // event handler for the created button
       switch (buttonName) {
         case 'COMMENCER':
           return play();
@@ -50,7 +50,7 @@ createKeyboard = function() {
       game.gameKey = btn; // record game key reference
     }
     return btn;
-  };
+  });
 
   // Generate virtual keyboard
   results = [];
@@ -140,7 +140,7 @@ guess = function(letter) {
       key.disabled = true;
     }
     game.gameKey.textContent = 'NOUVEAU MOT';
-    return showDialog("<center>Bravo!<center><br><center>Vous avez trouvé.</center>");
+    return showDialog("<center>Bravo!<center><br><center>Vous avez gagné.</center>");
   }
 };
 

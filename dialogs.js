@@ -25,8 +25,11 @@ window.showDialog = function(message, extras = {}) {
     dialog.close();
     return dialog.remove();
   };
+  //end
   return dialog;
 };
+
+//end
 
 // -----------------------------------------------------------------------------
 window.showConfirmDialog = function(message, extras = {}) {
@@ -51,7 +54,8 @@ window.showConfirmDialog = function(message, extras = {}) {
   okBtn.onclick = function() {
     return closeDialog(leftLabel);
   };
-  
+  //end
+
   // Cancel button
   cancelBtn = dialog.querySelector('#cancelBtn');
   cancelBtn.style.padding = '2px 15px';
@@ -59,15 +63,18 @@ window.showConfirmDialog = function(message, extras = {}) {
   cancelBtn.onclick = function() {
     return closeDialog(rightLabel);
   };
+  //end
   dialog.addEventListener('cancel', function(e) {
     e.preventDefault(); // prevents the default close
     return closeDialog('escape');
   });
+  //end
   closeDialog = function(value) {
     dialog.returnValue = value;
     dialog.close();
     return dialog.remove();
   };
+  //end
   document.body.appendChild(dialog);
   dialog.showModal();
   
@@ -80,3 +87,8 @@ window.showConfirmDialog = function(message, extras = {}) {
     };
   });
 };
+
+//end
+//end
+
+//end
